@@ -3,6 +3,7 @@ import { useDeleteTopic, useGetTopic, useUpdateTopic } from "../api/topics";
 import { useEffect, useState } from "react";
 import { Comment, Topic } from "../interfaces/interfaces";
 import DownArrow from "../assets/icons/arrow.png";
+import WriteIcon from "../assets/icons/pencil.png";
 import {
   useCreateComment,
   useDeleteComment,
@@ -168,7 +169,13 @@ export const TopicPage = () => {
             placeholder="Add a comment..."
             className="flex-grow p-2 border rounded-xl"
           />
-          <Button title="Post" onClick={handleAddComment} />
+          <div className="hidden md:block">
+            <Button title="Post" onClick={handleAddComment} />
+          </div>
+          {/* Icon visible on smaller screens */}
+          <div className="block md:hidden bg-blue-600 text-white text-lg rounded-lg transition duration-300 ease-in-out transform hover:bg-blue-700 hover:scale-105 w-30 h-full">
+            <img src={WriteIcon} className="" onClick={handleAddComment} />
+          </div>
         </div>
       </div>
       <TopicModal
