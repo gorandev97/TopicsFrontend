@@ -3,6 +3,7 @@ import { useMutation } from "@tanstack/react-query";
 import { loginUser } from "../../api/auth";
 import { useNavigate } from "react-router-dom";
 import { Button } from "../Button";
+import { EmailModal } from "../modals/EmailModal";
 
 const LoginModal = ({
   isOpen,
@@ -12,6 +13,7 @@ const LoginModal = ({
   onClose: () => void;
 }) => {
   const [email, setEmail] = useState("");
+  const [modalOpen, setModalOpen] = useState<boolean>(false);
   const [password, setPassword] = useState("");
   const [emailError, setEmailError] = useState(""); // State for email error
   const navigate = useNavigate();
@@ -19,7 +21,6 @@ const LoginModal = ({
   const mutation = useMutation({
     mutationFn: loginUser,
     onSuccess: (data) => {
-      console.log("Login successful:", data);
       localStorage.setItem("userToken", data.access_token);
       navigate("/dashboard");
       onClose();
@@ -82,8 +83,7 @@ const LoginModal = ({
               required
               className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
             />
-            {emailError && <p className="text-red-500 text-sm">{emailError}</p>}{" "}
-            {/* Show error if email is invalid */}
+            {emailError && <p className="text-red-500 text-sm">{emailError}</p>}
           </div>
           <div>
             <label
@@ -101,12 +101,18 @@ const LoginModal = ({
               className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
             />
           </div>
-
+          <div
+            className="self-center w-full flex justify-end items-center cursor-pointer"
+            onClick={() => setModalOpen(true)}
+          >
+            Forgot password?
+          </div>
           <Button
             type="submit"
             isDisabled={mutation.isPending}
             title={mutation.isPending ? "Logging in..." : "Login"}
           />
+
           {mutation.isError && (
             <p className="text-red-500 text-sm">
               Error: {mutation.error.message}
@@ -116,6 +122,7 @@ const LoginModal = ({
             <p className="text-green-500 text-sm">Login successful!</p>
           )}
         </form>
+        <EmailModal onClose={() => setModalOpen(false)} isOpen={modalOpen} />
       </div>
     </div>
   );

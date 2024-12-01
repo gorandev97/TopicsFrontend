@@ -1,7 +1,7 @@
-import { useAllLikedTopics } from "../../api/topics";
+import { useUserTopics } from "../../api/topics";
 import { Topics } from "./Topics";
 
-export const HotTopics = () => {
+export const UserTopics = () => {
   const {
     data,
     fetchNextPage,
@@ -9,7 +9,7 @@ export const HotTopics = () => {
     isFetchingNextPage,
     status,
     refetch,
-  } = useAllLikedTopics();
+  } = useUserTopics();
 
   if (status === "pending") return <div>Loading...</div>;
   if (status === "error") return <div>Error loading topics</div>;

@@ -1,5 +1,6 @@
-import { useInfiniteQuery } from "@tanstack/react-query";
+import { useInfiniteQuery, useMutation } from "@tanstack/react-query";
 import config from "../config";
+import { toast } from "react-toastify";
 
 export const fetchLikedComments = async ({
   pageParam = 0,
@@ -56,4 +57,74 @@ export const createComment = async (createCommentDto: {
   });
 
   return response.json();
+};
+const updateComment = async (commentData: {
+  commentId: string;
+  content: string;
+}) => {
+  const token = localStorage.getItem("userToken");
+  const response = await fetch(
+    `${config.apiUrl}/comment/${commentData.commentId}`,
+    {
+      method: "PUT",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(commentData),
+    }
+  );
+
+  if (!response.ok) {
+    throw new Error("Failed to update comment");
+  }
+
+  return response.json();
+};
+
+export const useUpdateComment = () => {
+  return useMutation({
+    mutationFn: updateComment,
+  });
+};
+
+export const deleteComment = async (commentId: string) => {
+  const token = localStorage.getItem("userToken");
+  const response = await fetch(`${config.apiUrl}/comment/${commentId}`, {
+    method: "DELETE",
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    },
+  });
+
+  if (!response.ok) {
+    throw new Error("Failed to delete the topic");
+  }
+
+  const data = await response.json();
+  return data;
+};
+export const useDeleteComment = () => {
+  return useMutation({
+    mutationFn: deleteComment,
+    onSuccess: () => {
+      toast.success("Comment deleted");
+    },
+    onError: () => {
+      toast.error("There was an error deleting the comment");
+    },
+  });
+};
+
+export const useCreateComment = () => {
+  return useMutation({
+    mutationFn: createComment,
+    onSuccess: () => {
+      toast.success("Created a new comment");
+    },
+    onError: () => {
+      toast.error("Something went wrong!");
+    },
+  });
 };

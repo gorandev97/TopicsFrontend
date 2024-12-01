@@ -1,7 +1,5 @@
-import { getElapsedTime, formatNumber } from "../../helper/calculations";
+import { getElapsedTime } from "../../helper/calculations";
 import { Topic } from "../../interfaces/interfaces";
-import LikeImage from "../../assets/icons/like.png";
-import CommentImage from "../../assets/icons/chat-bubble.png";
 import { LikeButtons } from "../like/likeButtons";
 import { getDecodedToken } from "../../helper/token";
 
@@ -35,16 +33,6 @@ export const TopicContent = (props: TopicContentProps) => {
           targetId={topic.id}
           isTopic={true}
         />
-        {/*  <div className="flex flex-row gap-2 absolute bottom-0 left-2 bg-red-300">
-          <img src={LikeImage} alt="Profile" className="w-8 h-8 my-3" />
-          <div className="text-xl self-center">
-            {formatNumber(topic?.likesCount)}
-          </div>
-          <img src={CommentImage} alt="Profile" className="w-8 h-8 my-3" />
-          <div className="text-xl self-center">
-            {formatNumber(topic?.comments?.length)}
-          </div>
-        </div> */}
       </div>
     </>
   );

@@ -1,7 +1,4 @@
 import { Topic } from "../../interfaces/interfaces";
-import LikeImage from "../../assets/icons/like.png";
-import CommentImage from "../../assets/icons/chat-bubble.png";
-import { getElapsedTime, formatNumber } from "../../helper/calculations";
 import { useNavigate } from "react-router-dom";
 import { TopicContent } from "./TopicsContent";
 
