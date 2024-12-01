@@ -55,7 +55,7 @@ export const Topics = (props: TopicsProps) => {
       </div>
       <div key={"topics" + pages.length}>
         {pages[0].data.length === 0 && (
-          <EmptyState title="There are not topics here" />
+          <EmptyState title="There are no topics here" />
         )}
         {pages.map((page, index) => (
           <div key={index} className="flex flex-row flex-wrap justify-between">
