@@ -18,16 +18,12 @@ export const NotificationsButton = (props: NotificationsButtonProps) => {
     notifications ?? []
   );
   const [openDropDown, setIsDropdownOpen] = useState<boolean>(false);
-  const [totalCount, setTotalCount] = useState<number>(count);
+
   const dropdownRef = useRef<HTMLDivElement>(null);
   const handleClick = () => {
     setIsDropdownOpen((prev) => !prev);
     onClick();
   };
-
-  useEffect(() => {
-    setTotalCount(totalCount + unreadCount);
-  }, [unreadCount, totalCount]);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {

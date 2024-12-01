@@ -10,6 +10,7 @@ const SOCKET_URL = config.apiUrl;
 
 export const useSocket = (count: number, notifications: Notification[]) => {
   const [unreadCount, setUnreadCount] = useState<number>(count);
+
   const [unreadNotifications, setUnreadNotifications] =
     useState<Notification[]>(notifications);
   useEffect(() => {
@@ -22,16 +23,28 @@ export const useSocket = (count: number, notifications: Notification[]) => {
       console.log("Connected to WebSocket server");
     });
     socket.on("notificationCreated", (notification: Notification) => {
-      if (user?.id === notification.userId) toast.success(notification.content);
-
-      setUnreadCount((prevUnreadCount) => prevUnreadCount + 1);
+      if (user?.id === notification.userId) {
+        toast.success(notification.content);
+        setUnreadCount((prevUnreadCount) => prevUnreadCount + 1);
+      }
     });
-    socket.on("notificationsCount", (count: number) => {
-      setUnreadCount(count);
-    });
-    socket.on("unreadNotifications", (unreadNotifications: Notification[]) => {
-      setUnreadNotifications(unreadNotifications);
-    });
+    socket.on(
+      "notificationsCount",
+      (count: { notificationsCount: number; id: string }) => {
+        console.log(user?.id === count.id, user?.id, count.id);
+        if (user?.id === count.id) setUnreadCount(count.notificationsCount);
+      }
+    );
+    socket.on(
+      "unreadNotifications",
+      (unreadNotifications: {
+        unreadNotifications: Notification[];
+        id: string;
+      }) => {
+        if (user?.id === unreadNotifications.id)
+          setUnreadNotifications(unreadNotifications.unreadNotifications);
+      }
+    );
     return () => {
       socket.disconnect();
     };
