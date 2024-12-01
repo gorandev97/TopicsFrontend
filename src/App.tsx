@@ -7,6 +7,11 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { LandingPage } from "./pages/LandingPage";
 import { Dashboard } from "./pages/Dashboard";
 import { TopicPage } from "./pages/TopicPage";
+import { ToastContainer } from "react-toastify";
+import { UserTopicsPage } from "./pages/UserTopicsPage";
+import { ProfilePage } from "./pages/ProfilePage";
+import ResetPassword from "./pages/ResetPassword";
+import { NotFoundPage } from "./pages/NotFoundPage";
 
 const queryClient = new QueryClient();
 const App: React.FC = () => {
@@ -17,8 +22,6 @@ const App: React.FC = () => {
           <main className="flex-1 min-h-screen">
             <Routes>
               <Route path="/" element={<LandingPage />} />
-
-              {/* Protected Routes */}
               <Route
                 path="/dashboard"
                 element={
@@ -35,10 +38,29 @@ const App: React.FC = () => {
                   </ProtectedRoute>
                 }
               />
+              <Route
+                path="/my-topics"
+                element={
+                  <ProtectedRoute>
+                    <UserTopicsPage />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/my-profile"
+                element={
+                  <ProtectedRoute>
+                    <ProfilePage />
+                  </ProtectedRoute>
+                }
+              />
+              <Route path="/reset-password" element={<ResetPassword />} />
+              <Route path="*" element={<NotFoundPage />} />
             </Routes>
           </main>
         </Router>
       </QueryClientProvider>
+      <ToastContainer />
     </div>
   );
 };

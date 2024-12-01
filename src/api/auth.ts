@@ -1,4 +1,6 @@
+import { useMutation } from "@tanstack/react-query";
 import config from "../config";
+import { toast } from "react-toastify";
 
 export const loginUser = async (credentials: {
   email: string;
@@ -50,4 +52,60 @@ export const registerUser = async (credentials: {
       throw new Error("Unknown error occurred");
     }
   }
+};
+const resetPassword = async (commentData: {
+  password?: string;
+  token?: string | null;
+}) => {
+  const response = await fetch(`${config.apiUrl}/auth/reset-password`, {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(commentData),
+  });
+
+  if (!response.ok) {
+    throw new Error("Failed to update password, please resend the mail");
+  }
+  return response;
+};
+
+export const useResetPassword = () => {
+  return useMutation({
+    mutationFn: resetPassword,
+    onSuccess: () => {
+      toast.success("Reset password successful");
+    },
+    onError: (error) => {
+      toast.error(error.message);
+    },
+  });
+};
+
+const forgotPassword = async (commentData: { email: string }) => {
+  const response = await fetch(`${config.apiUrl}/auth/forgot-password`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(commentData),
+  });
+
+  if (!response.ok) {
+    throw new Error("Failed to update password, please resend the mail");
+  }
+  return response;
+};
+
+export const useForgotPassword = () => {
+  return useMutation({
+    mutationFn: forgotPassword,
+    onSuccess: () => {
+      toast.success("Reset link has been sent to your email");
+    },
+    onError: (error) => {
+      toast.error(error.message);
+    },
+  });
 };

@@ -1,13 +1,13 @@
 import config from "../config";
+import { Like } from "../interfaces/interfaces";
 
 export const toggleLikeDislikeAPI = async (likeCredentials: {
   userId: string;
   targetId: string;
   isTopic: boolean;
   isLike: boolean;
-}) => {
+}): Promise<Like> => {
   const token = localStorage.getItem("userToken");
-  console.log(likeCredentials, "KREDENCIJALI");
   const response = await fetch(`${config.apiUrl}/like`, {
     method: "POST",
     headers: {
@@ -18,10 +18,11 @@ export const toggleLikeDislikeAPI = async (likeCredentials: {
       likeCredentials,
     }),
   });
-  console.log(response.json());
+  const responseData = await response.json(); // Wait for the JSON to parse
+
   if (!response.ok) {
     throw new Error("Error toggling like/dislike");
   }
 
-  return response;
+  return responseData;
 };

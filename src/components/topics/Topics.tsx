@@ -1,12 +1,16 @@
 import {
   FetchNextPageOptions,
   InfiniteData,
-  useInfiniteQuery,
+  QueryObserverResult,
+  RefetchOptions,
 } from "@tanstack/react-query";
-import { fetchTopics } from "../../api/topics";
 import { TopicsCard } from "./TopicsCard";
 import { Topic } from "../../interfaces/interfaces";
 import { Button } from "../Button";
+import { EmptyState } from "../placeholder/EmptyState";
+import { TopicModal } from "../modals/TopicModal";
+import { useEffect, useState } from "react";
+import { useCreateTopic } from "../../api/topics";
 
 type TopicsProps = {
   pages: {
@@ -16,30 +20,65 @@ type TopicsProps = {
   hasNextPage: boolean;
   isFetchingNextPage: boolean;
   fetchNextPage: (options?: FetchNextPageOptions) => void;
+  refetch: (options?: RefetchOptions) => Promise<
+    QueryObserverResult<
+      InfiniteData<
+        {
+          data: any;
+          nextPage: number | null;
+        },
+        unknown
+      >,
+      Error
+    >
+  >;
 };
 
 export const Topics = (props: TopicsProps) => {
-  const { pages, hasNextPage, isFetchingNextPage, fetchNextPage } = props;
+  const { pages, hasNextPage, isFetchingNextPage, fetchNextPage, refetch } =
+    props;
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const { mutate, isSuccess } = useCreateTopic();
+  const handleEditTopic = (title: string, content: string) => {
+    mutate({ title, description: content });
+  };
+  useEffect(() => {
+    refetch();
+  }, [isSuccess, refetch]);
   return (
-    <div key={"topics" + pages.length}>
-      {pages.map((page, index) => (
-        <div key={index} className="flex flex-row flex-wrap justify-between">
-          {page.data.map((topic: Topic) => (
-            <TopicsCard topic={topic} />
-          ))}
-        </div>
-      ))}
-      <div className="self-center w-full flex justify-center items-center pb-10">
-        {hasNextPage ? (
-          <Button
-            title={isFetchingNextPage ? "Loading more..." : "Load More"}
-            onClick={() => fetchNextPage()}
-            isDisabled={isFetchingNextPage}
-          />
-        ) : (
-          <div>No more topics</div>
-        )}
+    <>
+      <div className="self-center w-full flex justify-end items-center pt-5 pr-10">
+        <Button
+          title={"Create a new topic"}
+          onClick={() => setIsModalOpen(true)}
+        ></Button>
       </div>
-    </div>
+      <div key={"topics" + pages.length}>
+        {pages[0].data.length === 0 && (
+          <EmptyState title="There are not topics here" />
+        )}
+        {pages.map((page, index) => (
+          <div key={index} className="flex flex-row flex-wrap justify-between">
+            {page.data.map((topic: Topic) => (
+              <TopicsCard topic={topic} />
+            ))}
+          </div>
+        ))}
+        <div className="self-center w-full flex justify-center items-center pb-10">
+          {hasNextPage && (
+            <Button
+              title={isFetchingNextPage ? "Loading more..." : "Load More"}
+              onClick={() => fetchNextPage()}
+              isDisabled={isFetchingNextPage}
+            />
+          )}
+        </div>
+      </div>
+      <TopicModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        onSave={handleEditTopic}
+      />
+    </>
   );
 };

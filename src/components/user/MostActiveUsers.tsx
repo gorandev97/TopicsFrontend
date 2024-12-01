@@ -1,6 +1,5 @@
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { fetchUsers } from "../../api/user";
-import { User } from "../../interfaces/interfaces";
 import { Button } from "../Button";
 import CommentImage from "../../assets/icons/chat-bubble.png";
 import { formatNumber } from "../../helper/calculations";
@@ -21,7 +20,7 @@ export const MostActiveUsers = () => {
       getNextPageParam: (lastPage) => lastPage.nextPage,
       initialPageParam: 0,
     });
-  console.log(data);
+
   if (status === "pending") return <div>Loading...</div>;
   if (status === "error") return <div>Error loading users</div>;
   return (

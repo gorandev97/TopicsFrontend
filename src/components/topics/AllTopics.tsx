@@ -1,11 +1,16 @@
-import { useInfiniteQuery } from "@tanstack/react-query";
-import { fetchTopics, useAllTopics } from "../../api/topics";
+import { useAllTopics } from "../../api/topics";
 import { Topics } from "./Topics";
 
 export const AllTopics = () => {
-  const { data, fetchNextPage, hasNextPage, isFetchingNextPage, status } =
-    useAllTopics();
-  console.log(data, status);
+  const {
+    data,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+    status,
+    refetch,
+  } = useAllTopics();
+
   if (status === "pending") return <div>Loading...</div>;
   if (status === "error") return <div>Error loading topics</div>;
   return (
@@ -14,6 +19,7 @@ export const AllTopics = () => {
       hasNextPage={hasNextPage}
       isFetchingNextPage={isFetchingNextPage}
       fetchNextPage={fetchNextPage}
+      refetch={refetch}
     />
   );
 };

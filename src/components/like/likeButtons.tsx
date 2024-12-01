@@ -4,6 +4,8 @@ import { toggleLikeDislikeAPI } from "../../api/like";
 import { formatNumber } from "../../helper/calculations";
 import LikeImage from "../../assets/icons/like.png";
 import DisLikeImage from "../../assets/icons/dislike.png";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 interface LikeButtonsProps {
   likesCount: number;
@@ -26,20 +28,18 @@ export const LikeButtons: React.FC<LikeButtonsProps> = ({
   const { mutate } = useMutation({
     mutationFn: toggleLikeDislikeAPI,
     onSuccess: (data) => {
-      console.log("Like/dislike action was successful", data);
-    },
-    onError: (error) => {
-      console.error("Error performing like/dislike action", error);
-    },
-    onMutate: (variables) => {
-      // Optimistic update (update UI instantly)
-      if (variables.isLike) {
-        setLocalLikesCount((prev) => prev + 1);
-        setLocalDislikesCount((prev) => prev - 1);
-      } else {
-        setLocalLikesCount((prev) => prev - 1);
-        setLocalDislikesCount((prev) => prev + 1);
+      if (isTopic && data.topic) {
+        setLocalLikesCount(data.topic.likesCount);
+        setLocalDislikesCount(data.topic.dislikesCount);
+      } else if (data.comment) {
+        setLocalLikesCount(data.comment.likesCount);
+        setLocalDislikesCount(data.comment.dislikesCount);
       }
+    },
+    onError: () => {
+      toast.error("You already performed that action", {
+        position: "top-right",
+      });
     },
   });
 
