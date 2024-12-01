@@ -26,10 +26,10 @@ export const fetchTopics = async ({ pageParam = 0 }) => {
 
 export const useAllTopics = () => {
   return useInfiniteQuery({
-    queryKey: ["allTopics"], // Query key for caching
-    queryFn: fetchTopics, // Function to fetch data
-    getNextPageParam: (lastPage) => lastPage.nextPage, // Determine the next page
-    initialPageParam: 0, // Starting page index
+    queryKey: ["allTopics"],
+    queryFn: fetchTopics,
+    getNextPageParam: (lastPage) => lastPage.nextPage,
+    initialPageParam: 0,
   });
 };
 
@@ -136,7 +136,7 @@ export const deleteTopic = async (topicId: string) => {
 };
 export const useDeleteTopic = () => {
   return useMutation({
-    mutationFn: deleteTopic, // Ensure this function is correct
+    mutationFn: deleteTopic,
     onSuccess: () => {
       toast.success("Topic deleted");
     },
@@ -170,10 +170,10 @@ export const fetchUserTopics = async ({ pageParam = 0 }) => {
 
 export const useUserTopics = () => {
   return useInfiniteQuery({
-    queryKey: ["allUserTopics"], // Query key for caching
-    queryFn: fetchUserTopics, // Function to fetch data
-    getNextPageParam: (lastPage) => lastPage.nextPage, // Determine the next page
-    initialPageParam: 0, // Starting page index
+    queryKey: ["allUserTopics"],
+    queryFn: fetchUserTopics,
+    getNextPageParam: (lastPage) => lastPage.nextPage,
+    initialPageParam: 0,
   });
 };
 

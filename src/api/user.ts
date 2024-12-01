@@ -83,3 +83,34 @@ export const useUpdateUser = () => {
     },
   });
 };
+
+export const deleteUser = async () => {
+  const token = localStorage.getItem("userToken");
+  console.log(token);
+  const response = await fetch(`${config.apiUrl}/users/delete`, {
+    method: "DELETE",
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    },
+  });
+
+  if (!response.ok) {
+    throw new Error("Failed to delete the user");
+  }
+
+  const data = await response.json();
+  return data;
+};
+export const useDeleteUser = () => {
+  return useMutation({
+    mutationFn: deleteUser,
+    onSuccess: () => {
+      toast.success("User deleted");
+      localStorage.removeItem("userToken");
+    },
+    onError: () => {
+      toast.error("There was an error deleting the user");
+    },
+  });
+};

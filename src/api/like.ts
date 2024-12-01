@@ -18,7 +18,7 @@ export const toggleLikeDislikeAPI = async (likeCredentials: {
       likeCredentials,
     }),
   });
-  const responseData = await response.json(); // Wait for the JSON to parse
+  const responseData = await response.json();
 
   if (!response.ok) {
     throw new Error("Error toggling like/dislike");
