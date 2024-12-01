@@ -5,7 +5,7 @@ import { HotTopics } from "../components/topics/HotTopics";
 import { MostActiveUsers } from "../components/user/MostActiveUsers";
 
 export const Dashboard = () => {
-  const [activeTab, setActiveTab] = useState("tab1");
+  const [activeTab, setActiveTab] = useState("allTopics");
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const renderTabContent = () => {
     switch (activeTab) {
