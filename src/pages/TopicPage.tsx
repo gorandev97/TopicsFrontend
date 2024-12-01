@@ -137,7 +137,7 @@ export const TopicPage = () => {
               )}
             </div>
           </div>
-          <div className="overflow-y-auto h-[500px]">
+          <div className="overflow-y-auto sm:h-[500px] max-h-[300px] h-full">
             {likedCommentsData?.pages.map((page, index) => (
               <div
                 key={index}
@@ -172,7 +172,6 @@ export const TopicPage = () => {
           <div className="hidden md:block">
             <Button title="Post" onClick={handleAddComment} />
           </div>
-          {/* Icon visible on smaller screens */}
           <div className="block md:hidden bg-blue-600 text-white text-lg rounded-lg transition duration-300 ease-in-out transform hover:bg-blue-700 hover:scale-105 w-30 h-full">
             <img src={WriteIcon} className="" onClick={handleAddComment} />
           </div>
