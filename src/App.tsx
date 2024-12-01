@@ -1,8 +1,7 @@
 // src/App.tsx
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-// Import Login component
-import ProtectedRoute from "./components/routing/ProtectedRoute"; // ProtectedRoute component
+import ProtectedRoute from "./components/routing/ProtectedRoute";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { LandingPage } from "./pages/LandingPage";
 import { Dashboard } from "./pages/Dashboard";
