@@ -137,7 +137,7 @@ export const TopicPage = () => {
               )}
             </div>
           </div>
-          <div className="overflow-y-auto sm:h-[500px] max-h-[300px] h-full">
+          <div className="overflow-y-auto sm:max-h-[500px] max-h-[350px]">
             {likedCommentsData?.pages.map((page, index) => (
               <div
                 key={index}
