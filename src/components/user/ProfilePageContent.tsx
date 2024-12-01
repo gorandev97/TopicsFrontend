@@ -2,21 +2,28 @@ import { useEffect, useState } from "react";
 import { User } from "../../interfaces/interfaces";
 import { Button } from "../Button";
 import { EditUserModal } from "../modals/EditUserModal";
-import { useGetMe, useUpdateUser } from "../../api/user";
+import { useDeleteUser, useGetMe, useUpdateUser } from "../../api/user";
 import { ClipLoader } from "react-spinners";
 import { NewPasswordModal } from "../modals/PasswordModal";
+import { DeleteUserModal } from "../modals/DeleteUserModal";
+import { useNavigate } from "react-router-dom";
 
 export const ProfilePageContent = () => {
   const [isEditProfileModalOpen, setIsEditProfileModalOpen] =
     useState<boolean>(false);
   const [isEditPasswordModalOpen, setIsEditPasswordModalOpen] =
     useState<boolean>(false);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState<boolean>(false);
   const { data, isSuccess, isLoading } = useGetMe();
   const [user, setUser] = useState<User>();
+  const navigate = useNavigate();
   useEffect(() => {
     if (isSuccess) setUser(data);
   }, [isSuccess, data]);
+
   const { mutate } = useUpdateUser();
+  const { mutate: deleteUser, isSuccess: isDeleteUserSuccess } =
+    useDeleteUser();
   const handleEditUser = (
     firstName: string,
     lastName: string,
@@ -35,6 +42,13 @@ export const ProfilePageContent = () => {
     }
   };
 
+  const handleDeleteUser = () => {
+    deleteUser();
+  };
+
+  useEffect(() => {
+    if (isDeleteUserSuccess) navigate("/");
+  }, [isDeleteUserSuccess]);
   return (
     <>
       <ClipLoader color="#3498db" loading={isLoading} size={50} />
@@ -67,6 +81,10 @@ export const ProfilePageContent = () => {
               title={"Change Password"}
               onClick={() => setIsEditPasswordModalOpen(true)}
             />
+            <Button
+              title={"Delete account"}
+              onClick={() => setIsDeleteModalOpen(true)}
+            />
           </div>
           <EditUserModal
             isOpen={isEditProfileModalOpen}
@@ -80,6 +98,11 @@ export const ProfilePageContent = () => {
             isOpen={isEditPasswordModalOpen}
             onSave={handleEditPassword}
             onClose={() => setIsEditPasswordModalOpen(false)}
+          />
+          <DeleteUserModal
+            isModalOpen={isDeleteModalOpen}
+            setIsModalOpen={setIsDeleteModalOpen}
+            handleDelete={handleDeleteUser}
           />
         </div>
       ) : (
