@@ -2,6 +2,7 @@ import { useState } from "react";
 import LoginModal from "../components/auth/Login";
 import RegisterModal from "../components/auth/Register";
 import BackgroundImage from "../assets/logo/convo_cloud_transparent.png";
+import BackgroundPicture from "../assets/icons/bg.jpg"
 import { Button } from "../components/Button";
 
 export const LandingPage = () => {
@@ -15,7 +16,7 @@ export const LandingPage = () => {
   const closeRegister = () => setIsRegisterOpen(false);
 
   return (
-    <div className="h-screen flex items-center justify-between px-12 bg-cover bg-center bg-no-repeat bg-gradient-to-b from-blue-200 to-blue-400 flex flex-row px-10">
+    <div className="h-screen flex items-center justify-between px-12 bg-cover bg-center bg-no-repeat  flex flex-row px-10">
       <div className="flex justify-start items-center w-1/3">
         <img
           src={BackgroundImage}
@@ -23,14 +24,14 @@ export const LandingPage = () => {
           className="w-full h-auto"
         />
       </div>
-      <div className="flex flex-col  justify-center w-2/3 text-white text-left w-[600px] mr-20">
-        <h1 className="text-5xl font-extrabold leading-tight mb-4">
+      <div className="flex flex-col  justify-center w-2/3 text-white text-left w-[600px] mr-20"> 
+        <h1 className="text-5xl font-extrabold leading-tight mb-4 text-white drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,0.8)]">
           Welcome to ConvoCloud
         </h1>
-        <p className="text-xl mb-6">
+        <p className="text-xl mb-6 drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,0.8)]">
           A platform for meaningful conversations and insightful discussions.
         </p>
-        <p className="text-lg mb-8">
+        <p className="text-lg mb-8 drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,0.8)]">
           ConvoCloud is where ideas flow and communities thrive. Whether you're
           sharing your thoughts, exploring new topics, or joining vibrant
           conversations, our platform is designed to bring people together. Join
