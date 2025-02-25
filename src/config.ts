@@ -1,5 +1,5 @@
 const config = {
-  apiUrl: "http://localhost:4000",
+  apiUrl: "http://topics-4af9.onrender.com",
 };
 
 export default config;
