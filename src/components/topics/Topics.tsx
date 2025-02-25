@@ -11,6 +11,7 @@ import { EmptyState } from "../placeholder/EmptyState";
 import { TopicModal } from "../modals/TopicModal";
 import { useEffect, useState } from "react";
 import { useCreateTopic } from "../../api/topics";
+import { Glow, GlowCapture } from "@codaworks/react-glow";
 
 type TopicsProps = {
   pages: {
@@ -60,7 +61,12 @@ export const Topics = (props: TopicsProps) => {
         {pages.map((page, index) => (
           <div key={index} className="flex flex-row flex-wrap justify-between">
             {page.data.map((topic: Topic) => (
-              <TopicsCard topic={topic} />
+              <GlowCapture>
+                <Glow color='#90D5FF'>
+                  <TopicsCard topic={topic} />
+                </Glow>
+              </GlowCapture>
+              
             ))}
           </div>
         ))}
