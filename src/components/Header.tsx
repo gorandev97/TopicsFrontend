@@ -10,7 +10,7 @@ import {
 import { Notification } from "../interfaces/interfaces";
 
 export const Header = () => {
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false); // State to toggle dropdown visibility
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false); 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const user = getDecodedToken();
   const [notificationsData, setNotificationsData] = useState<{
@@ -66,7 +66,7 @@ export const Header = () => {
   }, [isNotificationsUpdateSuccess, refetch]);
 
   return (
-    <div className="w-full h-20 bg-gradient-to-b from-blue-200 to-blue-400 flex flex-row justify-between items-center">
+    <div className="w-full h-20 bg-gradient-to-b from-blue-200 to-white flex flex-row justify-between items-center">
       <img
         src={Logo}
         alt="ConvoCloud Logo"
@@ -74,7 +74,7 @@ export const Header = () => {
         onClick={() => navigate("/dashboard")}
       />
 
-      <h1 className="text-5xl font-extrabold leading-tight text-blue-700 hidden md:block">
+      <h1 className="text-5xl font-extrabold leading-tight text-white hidden drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,0.8)] md:block">
         ConvoCloud
       </h1>
       <div className="flex flex-row justify-center items-center">

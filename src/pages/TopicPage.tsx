@@ -110,14 +110,14 @@ export const TopicPage = () => {
     <div className="relative flex flex-col h-[calc(100vh-100px)] justfy-center items-center">
       {!isLoading && topic ? (
         <div className="px-10 mt-10 w-full">
-          <div className="bg-blue-300 rounded-xl shadow-2xl">
+          <div className="bg-white border border-blue-400 rounded-xl shadow-2xl">
             <TopicsFullCard
               topic={topic}
               setIsModalOpen={setIsModalOpen}
               setIsDeleteModalOpen={setIsDeleteModalOpen}
             />
             <div className="w-full self-center flex">
-              {hasNextPage ? (
+              {hasNextPage && (
                 <button
                   onClick={() => fetchNextPage()}
                   disabled={isFetchingNextPage}
@@ -132,12 +132,27 @@ export const TopicPage = () => {
                     className="w-4 h-4 mt-1 ml-2"
                   />
                 </button>
-              ) : (
-                <div>No more comments</div>
-              )}
+              ) }
             </div>
           </div>
-          <div className="overflow-y-auto sm:max-h-[500px] max-h-[350px]">
+          <div className=" mt-2">
+        <div className="flex items-center space-x-2 bg-blue-100 border border-blue-300  shadow-xl rounded-xl p-4">
+          <input
+            type="text"
+            value={newComment}
+            onChange={(e) => setNewComment(e.target.value)}
+            placeholder="Add a comment..."
+            className="flex-grow p-2 border rounded-xl"
+          />
+          <div className="hidden md:block">
+            <Button title="Post" onClick={handleAddComment} />
+          </div>
+          <div className="block md:hidden bg-blue-600 text-white text-lg rounded-lg transition duration-300 ease-in-out transform hover:bg-blue-700 hover:scale-105 w-30 h-full">
+            <img src={WriteIcon} className="" onClick={handleAddComment} />
+          </div>
+        </div>
+      </div>
+          <div className="mb-10">
             {likedCommentsData?.pages.map((page, index) => (
               <div
                 key={index}
@@ -160,23 +175,7 @@ export const TopicPage = () => {
         <div>Loading ...</div>
       )}
 
-      <div className="absolute bottom-4 left-0 right-0 px-10 ">
-        <div className="flex items-center space-x-2 bg-white shadow-xl rounded-xl p-4">
-          <input
-            type="text"
-            value={newComment}
-            onChange={(e) => setNewComment(e.target.value)}
-            placeholder="Add a comment..."
-            className="flex-grow p-2 border rounded-xl"
-          />
-          <div className="hidden md:block">
-            <Button title="Post" onClick={handleAddComment} />
-          </div>
-          <div className="block md:hidden bg-blue-600 text-white text-lg rounded-lg transition duration-300 ease-in-out transform hover:bg-blue-700 hover:scale-105 w-30 h-full">
-            <img src={WriteIcon} className="" onClick={handleAddComment} />
-          </div>
-        </div>
-      </div>
+     
       <TopicModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}

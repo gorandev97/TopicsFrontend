@@ -12,7 +12,7 @@ export const TopicsCard = (props: TopicsProps) => {
   return (
     <div
       key={topic.id}
-      className="w-[500px] h-[300px] bg-gradient-to-b from-blue-200 to-blue-400 rounded-lg m-8 relative shadow-2xl cursor-pointer"
+      className="w-[500px] h-[300px] bg-white border border-blue-500 rounded-lg m-8 relative shadow-2xl cursor-pointer"
       onClick={() => navigate(`/topic/${topic.id}`)}
     >
       <TopicContent topic={topic} />
