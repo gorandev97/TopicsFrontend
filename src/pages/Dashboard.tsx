@@ -88,7 +88,7 @@ export const Dashboard = () => {
         )}
       </div>
 
-      <h2 className="flex-1 text-center text-4xl font-bold text-grey-800 mt-10">
+      <h2 className="flex-1 text-center text-4xl font-bold text-grey-800 mt-10 text-white drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,0.8)] ">
         {activeTab === "allTopics"
           ? "All topics"
           : activeTab === "hotTopics"
