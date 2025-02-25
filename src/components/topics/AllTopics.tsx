@@ -1,4 +1,6 @@
 import { useAllTopics } from "../../api/topics";
+import ErrorMessage from "../loader/Error";
+import Spinner from "../loader/Spinner";
 import { Topics } from "./Topics";
 
 export const AllTopics = () => {
@@ -11,8 +13,8 @@ export const AllTopics = () => {
     refetch,
   } = useAllTopics();
 
-  if (status === "pending") return <div>Loading...</div>;
-  if (status === "error") return <div>Error loading topics</div>;
+  if (status === "pending") return <Spinner />;
+  if (status === "error") return <ErrorMessage message="Error loading topics" />;
   return (
     <Topics
       pages={data.pages}

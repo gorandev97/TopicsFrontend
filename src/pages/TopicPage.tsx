@@ -16,6 +16,7 @@ import ConfirmationModal from "../components/modals/DeleteModal";
 import { CommentModal } from "../components/modals/CommentModal";
 import { CommentCard } from "../components/comments/commentCards";
 import { TopicsFullCard } from "../components/topics/TopicsFullCard";
+import Spinner from "../components/loader/Spinner";
 
 export const TopicPage = () => {
   const { id } = useParams();
@@ -172,7 +173,7 @@ export const TopicPage = () => {
           </div>
         </div>
       ) : (
-        <div>Loading ...</div>
+        <Spinner />
       )}
 
      
