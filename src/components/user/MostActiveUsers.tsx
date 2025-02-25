@@ -4,6 +4,7 @@ import { Button } from "../Button";
 import CommentImage from "../../assets/icons/chat-bubble.png";
 import { formatNumber } from "../../helper/calculations";
 import Spinner from "../loader/Spinner";
+import ErrorMessage from "../loader/Error";
 
 type UserData = {
   firstName: string;
@@ -23,7 +24,7 @@ export const MostActiveUsers = () => {
     });
 
   if (status === "pending") return <Spinner />;
-  if (status === "error") return <div>Error loading users</div>;
+  if (status === "error") return <ErrorMessage message="Error loading users" />;
   return (
     <>
       {data.pages.map((page, index) => (
