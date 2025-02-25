@@ -22,7 +22,7 @@ export const CommentCard = (props: CommentCardProps) => {
     setCommentContent,
   } = props;
   return (
-    <div className="border-blue-300 border-2 rounded-xl shadow-2xl w-full">
+    <div className="border-blue-300 border-2 bg-blue-100 rounded-xl shadow-2xl w-full">
       <div className="flex flex-row ml-3 justify-between">
         <div className="flex flex-row">
           <img

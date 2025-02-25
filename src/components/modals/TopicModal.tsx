@@ -17,6 +17,8 @@ export const TopicModal = ({
 }: ModalProps) => {
   const [title, setTitle] = useState<string>(initialTitle);
   const [content, setContent] = useState<string>(initialContent);
+  const [titleError, setTitleError] = useState<string>("");
+
   const handleSave = () => {
     if (title.trim() && content.trim()) {
       onSave(title, content);
@@ -30,6 +32,16 @@ export const TopicModal = ({
       setContent(initialContent);
     }
   }, [isOpen, initialTitle, initialContent]);
+
+  const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newTitle = e.target.value;
+    if (newTitle.length > 60) {
+      setTitleError("Title cannot exceed 60 characters.");
+    } else {
+      setTitleError("");
+    }
+    setTitle(newTitle);
+  };
 
   if (!isOpen) return null;
 
@@ -45,10 +57,12 @@ export const TopicModal = ({
             id="title"
             type="text"
             value={title ?? initialTitle}
-            onChange={(e) => setTitle(e.target.value)}
+            onChange={handleTitleChange}
+            maxLength={60} // Set maxLength for the title
             className="w-full px-3 py-2 border rounded-md"
             placeholder="Topic title"
           />
+          {titleError && <p className="text-red-500 text-sm">{titleError}</p>}
         </div>
         <div className="mb-4">
           <label htmlFor="content" className="block text-sm font-medium">

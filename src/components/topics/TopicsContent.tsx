@@ -24,7 +24,7 @@ export const TopicContent = (props: TopicContentProps) => {
         </div>
       </div>
       <div className="px-3">
-        <h2 className="text-xl font-bold text-blue-900">{topic.title}</h2>
+        <h2 className="text-xl font-bold text-blue-900 break-words">{topic.title}</h2>
         <div className="line-clamp-5">{topic?.description}</div>
         <LikeButtons
           likesCount={topic?.likesCount}
