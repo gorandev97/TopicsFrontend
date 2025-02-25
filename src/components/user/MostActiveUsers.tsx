@@ -3,6 +3,7 @@ import { fetchUsers } from "../../api/user";
 import { Button } from "../Button";
 import CommentImage from "../../assets/icons/chat-bubble.png";
 import { formatNumber } from "../../helper/calculations";
+import Spinner from "../loader/Spinner";
 
 type UserData = {
   firstName: string;
@@ -21,7 +22,7 @@ export const MostActiveUsers = () => {
       initialPageParam: 0,
     });
 
-  if (status === "pending") return <div>Loading...</div>;
+  if (status === "pending") return <Spinner />;
   if (status === "error") return <div>Error loading users</div>;
   return (
     <>
