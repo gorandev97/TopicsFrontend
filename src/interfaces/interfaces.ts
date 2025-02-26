@@ -43,6 +43,8 @@ export interface Comment {
   topic: Topic; // Related topic (foreign key relation)
   author: User; // Author (foreign key relation)
   likes: Like[]; // Likes related to the comment
+  replies: Comment[]; // Replies to the comment
+  parentCommentId?: string; // Foreign key referencing Comment (optional)
 }
 
 export interface Like {
