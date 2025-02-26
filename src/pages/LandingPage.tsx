@@ -25,13 +25,13 @@ export const LandingPage = () => {
         />
       </div>
       <div className="flex flex-col  justify-center w-2/3 text-white text-left w-[600px] mr-20"> 
-        <h1 className="text-5xl font-extrabold leading-tight mb-4 text-white drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,0.8)]">
+        <h1 className="text-5xl font-extrabold leading-tight mb-4 text-blue-100 drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,0.8)]">
           Welcome to ConvoCloud
         </h1>
-        <p className="text-xl mb-6 drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,0.8)]">
+        <p className="text-xl mb-6 text-blue-100 drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,0.8)]">
           A platform for meaningful conversations and insightful discussions.
         </p>
-        <p className="text-lg mb-8 drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,0.8)]">
+        <p className="text-lg mb-8 text-blue-100 drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,0.8)]">
           ConvoCloud is where ideas flow and communities thrive. Whether you're
           sharing your thoughts, exploring new topics, or joining vibrant
           conversations, our platform is designed to bring people together. Join
