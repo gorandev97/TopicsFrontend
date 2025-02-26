@@ -58,6 +58,25 @@ export const createComment = async (createCommentDto: {
 
   return response.json();
 };
+
+export const replyToComment = async (replyCommentData: {
+  content: string;
+  topicId: string;
+  commentId: string;
+}) => {
+  const token = localStorage.getItem("userToken");
+  const response = await fetch(`${config.apiUrl}/comment/reply`, {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(replyCommentData),
+  });
+
+  return response.json();
+};
+
 const updateComment = async (commentData: {
   commentId: string;
   content: string;
@@ -125,6 +144,18 @@ export const useCreateComment = () => {
     },
     onError: () => {
       toast.error("Something went wrong!");
+    },
+  });
+};
+
+export const useReplyComment = () => {
+  return useMutation({
+    mutationFn: replyToComment,
+    onSuccess: () => {
+      toast.success("Replied to comment");
+    },
+    onError: () => {
+      toast.error("Failed to reply to comment");
     },
   });
 };

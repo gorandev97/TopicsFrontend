@@ -8,6 +8,7 @@ import {
   useCreateComment,
   useDeleteComment,
   useLikedComments,
+  useReplyComment,
   useUpdateComment,
 } from "../api/comments";
 import { Button } from "../components/Button";
@@ -22,6 +23,7 @@ export const TopicPage = () => {
   const { id } = useParams();
   const [topic, setTopic] = useState<Topic>();
   const [newComment, setNewComment] = useState<string>("");
+
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState<boolean>(false);
   const [isDeleteCommentModalOpen, setIsDeleteCommentModalOpen] =
@@ -46,6 +48,7 @@ export const TopicPage = () => {
 
   const { mutate: mutateCreateComment, isSuccess: isCreateCommentSuccess } =
     useCreateComment();
+
   const { mutate: mutateDeletetTopic, isSuccess: isDeleteTopicSuccess } =
     useDeleteTopic();
   const { mutate: mutateCommentUpdate, isSuccess: isCommentUpdateSuccess } =
@@ -133,26 +136,26 @@ export const TopicPage = () => {
                     className="w-4 h-4 mt-1 ml-2"
                   />
                 </button>
-              ) }
+              )}
             </div>
           </div>
           <div className=" mt-2">
-        <div className="flex items-center space-x-2 bg-blue-100 border border-blue-300  shadow-xl rounded-xl p-4">
-          <input
-            type="text"
-            value={newComment}
-            onChange={(e) => setNewComment(e.target.value)}
-            placeholder="Add a comment..."
-            className="flex-grow p-2 border rounded-xl"
-          />
-          <div className="hidden md:block">
-            <Button title="Post" onClick={handleAddComment} />
+            <div className="flex items-center space-x-2 bg-blue-100 border border-blue-300  shadow-xl rounded-xl p-4">
+              <input
+                type="text"
+                value={newComment}
+                onChange={(e) => setNewComment(e.target.value)}
+                placeholder="Add a comment..."
+                className="flex-grow p-2 border rounded-xl"
+              />
+              <div className="hidden md:block">
+                <Button title="Post" onClick={handleAddComment} />
+              </div>
+              <div className="block md:hidden bg-blue-600 text-white text-lg rounded-lg transition duration-300 ease-in-out transform hover:bg-blue-700 hover:scale-105 w-30 h-full">
+                <img src={WriteIcon} className="" onClick={handleAddComment} />
+              </div>
+            </div>
           </div>
-          <div className="block md:hidden bg-blue-600 text-white text-lg rounded-lg transition duration-300 ease-in-out transform hover:bg-blue-700 hover:scale-105 w-30 h-full">
-            <img src={WriteIcon} className="" onClick={handleAddComment} />
-          </div>
-        </div>
-      </div>
           <div className="mb-10">
             {likedCommentsData?.pages.map((page, index) => (
               <div
@@ -166,6 +169,7 @@ export const TopicPage = () => {
                     setIsDeleteCommentModalOpen={setIsDeleteCommentModalOpen}
                     setIsCommentModalOpen={setIsCommentModalOpen}
                     setCommentContent={setCommentContent}
+                    refetch={refetch}
                   />
                 ))}
               </div>
@@ -176,7 +180,6 @@ export const TopicPage = () => {
         <Spinner />
       )}
 
-     
       <TopicModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}

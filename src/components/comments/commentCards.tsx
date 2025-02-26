@@ -1,26 +1,66 @@
+import { useEffect, useState } from "react";
+import { useReplyComment } from "../../api/comments";
 import { getElapsedTime } from "../../helper/calculations";
 import { getDecodedToken } from "../../helper/token";
 import { Comment } from "../../interfaces/interfaces";
 import { ActionButtons } from "../ActionButtons";
 import { LikeButtons } from "../like/likeButtons";
-
+import { Button } from "../Button";
+import WriteIcon from "../../assets/icons/pencil.png";
+import {
+  InfiniteData,
+  QueryObserverResult,
+  RefetchOptions,
+} from "@tanstack/react-query";
 type CommentCardProps = {
   comment: Comment;
   setCommentId: (commentId: string) => void;
   setIsDeleteCommentModalOpen: (isDeletedCommentModalOpen: boolean) => void;
   setIsCommentModalOpen: (isCommentModalOpen: boolean) => void;
   setCommentContent: (commentContent: string) => void;
+  refetch: (options?: RefetchOptions) => Promise<
+    QueryObserverResult<
+      InfiniteData<
+        {
+          data: any;
+          nextPage: number | null;
+        },
+        unknown
+      >,
+      Error
+    >
+  >;
 };
 
 export const CommentCard = (props: CommentCardProps) => {
   const user = getDecodedToken();
+  const [isReplyComment, setIsReplyComment] = useState<boolean>(false);
+  const [replyComment, setReplyComment] = useState<string>("");
   const {
     comment,
     setCommentId,
     setIsCommentModalOpen,
     setIsDeleteCommentModalOpen,
     setCommentContent,
+    refetch,
   } = props;
+  const { mutate: mutateReplyComment, isSuccess: isReplyCommentSuccess } =
+    useReplyComment();
+
+  const handleReplyComment = () => {
+    if (replyComment.trim() !== "") {
+      console.log(comment);
+      mutateReplyComment({
+        content: replyComment,
+        topicId: comment.topicId ?? "",
+        commentId: comment.id,
+      });
+      setReplyComment("");
+    }
+  };
+  useEffect(() => {
+    refetch();
+  }, [isReplyCommentSuccess]);
   return (
     <div className="border-blue-300 border-2 bg-blue-100 rounded-xl shadow-2xl w-full">
       <div className="flex flex-row ml-3 justify-between">
@@ -51,8 +91,8 @@ export const CommentCard = (props: CommentCardProps) => {
           />
         )}
       </div>
-      <div>{comment.content}</div>
-      <div className="flex flex-row gap-4 ">
+      <div className="ml-2">{comment.content}</div>
+      <div className="flex flex-row gap-4 ml-2">
         <LikeButtons
           likesCount={comment?.likesCount}
           dislikesCount={comment.dislikesCount}
@@ -60,6 +100,78 @@ export const CommentCard = (props: CommentCardProps) => {
           targetId={comment.id}
           isTopic={false}
         />
+        <div
+          className="ri-reply-line text-3xl mt-2 text-blue-900 cursor-pointer"
+          onClick={() => {
+            setIsReplyComment(!isReplyComment);
+          }}
+        ></div>
+      </div>
+      {isReplyComment && (
+        <div className=" mt-2">
+          <div className="flex items-center space-x-2 bg-blue-100   rounded-xl p-4">
+            <input
+              type="text"
+              value={replyComment}
+              onChange={(e) => setReplyComment(e.target.value)}
+              placeholder="Add a comment..."
+              className="flex-grow p-2 border rounded-xl"
+            />
+            <div className="hidden md:block">
+              <Button title="Post" onClick={handleReplyComment} />
+            </div>
+            <div className="block md:hidden bg-blue-600 text-white text-lg rounded-lg transition duration-300 ease-in-out transform hover:bg-blue-700 hover:scale-105 w-30 h-full">
+              <img src={WriteIcon} className="" onClick={handleReplyComment} />
+            </div>
+          </div>
+        </div>
+      )}
+      <div>
+        {comment.replies.map((reply) => (
+          <div
+            className="mx-8 rounded-2xl bg-white mb-2 shadow-md"
+            key={reply.id}
+          >
+            <div className="flex flex-row ml-3  justify-between">
+              <div className="flex flex-row">
+                <img
+                  src={reply.author?.profileImage}
+                  alt="Profile"
+                  className="w-14 h-14 rounded-full bg-blue-500 my-3 cursor-pointer"
+                />
+                <div className="mt-3 ml-3">
+                  <div>
+                    {reply.author?.firstName + " " + reply.author?.lastName}
+                  </div>
+                  <div>{getElapsedTime(reply?.createdAt)} </div>
+                </div>
+              </div>
+              {user?.id === reply.postedBy && (
+                <ActionButtons
+                  onDelete={() => {
+                    setCommentId(reply.id);
+                    setIsDeleteCommentModalOpen(true);
+                  }}
+                  onEdit={() => {
+                    setIsCommentModalOpen(true);
+                    setCommentContent(reply.content);
+                    setCommentId(reply.id);
+                  }}
+                />
+              )}
+            </div>
+            <div className="ml-8"> {reply.content} </div>
+            <div className="flex flex-row gap-4 ml-2">
+              <LikeButtons
+                likesCount={reply?.likesCount}
+                dislikesCount={reply.dislikesCount}
+                userId={user?.id ?? ""}
+                targetId={reply.id}
+                isTopic={false}
+              />
+            </div>
+          </div>
+        ))}
       </div>
     </div>
   );
