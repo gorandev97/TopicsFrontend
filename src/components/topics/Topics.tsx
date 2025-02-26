@@ -48,7 +48,7 @@ export const Topics = (props: TopicsProps) => {
   }, [isSuccess, refetch]);
   return (
     <>
-      <div className="self-center w-full flex justify-end items-center pt-5 pr-10">
+      <div className="self-center w-full flex md:justify-end justify-center items-center pt-5 md:pr-10">
         <Button
           title={"Create a new topic"}
           onClick={() => setIsModalOpen(true)}

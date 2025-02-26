@@ -91,7 +91,7 @@ export const Header = () => {
             onClick={toggleDropdown}
           />
           {isDropdownOpen && (
-            <div className="absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-md shadow-lg z-10">
+            <div className="absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-md shadow-lg z-[99999]">
               <ul className="py-1">
                 <li
                   className="px-4 py-2 hover:bg-gray-100 cursor-pointer"

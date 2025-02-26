@@ -62,7 +62,7 @@ export const Dashboard = () => {
 
         {/* Mobile Dropdown Menu */}
         {isMenuOpen && (
-          <div className="absolute top-full left-0 w-full bg-white shadow-md flex flex-col gap-2 p-4 md:hidden z-10">
+          <div className="absolute top-full bg-gray-100 border border-blue-200 shadow-md flex flex-col gap-2 p-4 md:hidden z-10">
             <Button
               title={"All Topics"}
               onClick={() => {

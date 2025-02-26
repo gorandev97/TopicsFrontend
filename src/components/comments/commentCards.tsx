@@ -12,6 +12,7 @@ import {
   QueryObserverResult,
   RefetchOptions,
 } from "@tanstack/react-query";
+import { DropdownActionButtons } from "../DropdownActionButtons";
 type CommentCardProps = {
   comment: Comment;
   setCommentId: (commentId: string) => void;
@@ -36,6 +37,8 @@ export const CommentCard = (props: CommentCardProps) => {
   const user = getDecodedToken();
   const [isReplyComment, setIsReplyComment] = useState<boolean>(false);
   const [replyComment, setReplyComment] = useState<string>("");
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [isDropdownReplyOpen, setIsDropdownReplyOpen] = useState(false);
   const {
     comment,
     setCommentId,
@@ -78,17 +81,62 @@ export const CommentCard = (props: CommentCardProps) => {
           </div>
         </div>
         {user?.id === comment.postedBy && (
-          <ActionButtons
-            onDelete={() => {
-              setCommentId(comment.id);
-              setIsDeleteCommentModalOpen(true);
-            }}
-            onEdit={() => {
-              setIsCommentModalOpen(true);
-              setCommentContent(comment.content);
-              setCommentId(comment.id);
-            }}
-          />
+          <div className="relative">
+            <button
+              onClick={() => {
+                setIsDropdownOpen(!isDropdownOpen);
+                setIsDropdownReplyOpen(false);
+              }}
+              className="block md:hidden text-gray-700 mr-2 mt-8"
+            >
+              <svg
+                className="w-6 h-6"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M4 6h16M4 12h16M4 18h16"
+                ></path>
+              </svg>
+            </button>
+            <div className="hidden md:flex">
+              <ActionButtons
+                onDelete={() => {
+                  setCommentId(comment.id);
+                  setIsDeleteCommentModalOpen(true);
+                }}
+                onEdit={() => {
+                  setIsCommentModalOpen(true);
+                  setCommentContent(comment.content);
+                  setCommentId(comment.id);
+                }}
+              />
+            </div>
+            {isDropdownOpen && (
+              <div className="absolute right-0 mt-2 p-4 bg-white border border-gray-200 rounded-md shadow-lg z-10">
+                <DropdownActionButtons
+                  onEdit={() => {
+                    setIsCommentModalOpen(true);
+                    setIsDropdownReplyOpen(false);
+                    setIsDropdownOpen(false);
+                    setCommentContent(comment.content);
+                    setCommentId(comment.id);
+                  }}
+                  onDelete={() => {
+                    setCommentId(comment.id);
+                    setIsDropdownReplyOpen(false);
+                    setIsDropdownOpen(false);
+                    setIsDeleteCommentModalOpen(true);
+                  }}
+                />
+              </div>
+            )}
+          </div>
         )}
       </div>
       <div className="ml-2">{comment.content}</div>
@@ -147,17 +195,62 @@ export const CommentCard = (props: CommentCardProps) => {
                 </div>
               </div>
               {user?.id === reply.postedBy && (
-                <ActionButtons
-                  onDelete={() => {
-                    setCommentId(reply.id);
-                    setIsDeleteCommentModalOpen(true);
-                  }}
-                  onEdit={() => {
-                    setIsCommentModalOpen(true);
-                    setCommentContent(reply.content);
-                    setCommentId(reply.id);
-                  }}
-                />
+                <div className="relative">
+                  <button
+                    onClick={() => {
+                      setIsDropdownReplyOpen(!isDropdownReplyOpen);
+                      setIsDropdownOpen(false);
+                    }}
+                    className="block md:hidden text-gray-700 mr-2 mt-8"
+                  >
+                    <svg
+                      className="w-6 h-6"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
+                        d="M4 6h16M4 12h16M4 18h16"
+                      ></path>
+                    </svg>
+                  </button>
+                  <div className="hidden md:flex">
+                    <ActionButtons
+                      onDelete={() => {
+                        setCommentId(reply.id);
+                        setIsDeleteCommentModalOpen(true);
+                      }}
+                      onEdit={() => {
+                        setIsCommentModalOpen(true);
+                        setCommentContent(reply.content);
+                        setCommentId(reply.id);
+                      }}
+                    />
+                  </div>
+                  {isDropdownReplyOpen && (
+                    <div className="absolute right-0 mt-2 p-4 bg-white border border-gray-200 rounded-md shadow-lg z-10">
+                      <DropdownActionButtons
+                        onEdit={() => {
+                          setIsCommentModalOpen(true);
+                          setIsDropdownReplyOpen(false);
+                          setIsDropdownOpen(false);
+                          setCommentContent(reply.content);
+                          setCommentId(reply.id);
+                        }}
+                        onDelete={() => {
+                          setCommentId(reply.id);
+                          setIsDropdownReplyOpen(false);
+                          setIsDropdownOpen(false);
+                          setIsDeleteCommentModalOpen(true);
+                        }}
+                      />
+                    </div>
+                  )}
+                </div>
               )}
             </div>
             <div className="ml-8"> {reply.content} </div>
