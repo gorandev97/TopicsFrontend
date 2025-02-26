@@ -90,7 +90,7 @@ export const Header = () => {
   }, [isNotificationsUpdateSuccess, refetch]);
 
   return (
-    <div className="w-full h-20 bg-gradient-to-b from-blue-200 to-white flex flex-row justify-between items-center">
+    <div className="w-full h-20 bg-gradient-to-b from-blue-200 to-gray-200 flex flex-row justify-between items-center">
       <img
         src={Logo}
         alt="ConvoCloud Logo"
