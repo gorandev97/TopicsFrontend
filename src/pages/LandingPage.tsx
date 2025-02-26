@@ -28,10 +28,10 @@ export const LandingPage = () => {
           Welcome to ConvoCloud
         </h1>
 
-        <p className="text-xl mb-6 text-white drop-shadow-[0_2px_2px_rgba(0,0,0,0.5)]">
+        <p className="text-xl mb-6 text-white drop-shadow-[0_2px_2px_rgba(0,0,0,0.95)]">
           A platform for meaningful conversations and insightful discussions.
         </p>
-        <p className="text-lg mb-8 text-white drop-shadow-[0_2px_2px_rgba(0,0,0,0.5)]">
+        <p className="text-lg mb-8 text-white drop-shadow-[0_2px_2px_rgba(0,0,0,0.95)]">
           ConvoCloud is where ideas flow and communities thrive. Whether you're
           sharing your thoughts, exploring new topics, or joining vibrant
           conversations, our platform is designed to bring people together. Join
