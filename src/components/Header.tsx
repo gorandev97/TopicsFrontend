@@ -10,7 +10,7 @@ import {
 import { Notification } from "../interfaces/interfaces";
 
 export const Header = () => {
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false); 
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const user = getDecodedToken();
   const [notificationsData, setNotificationsData] = useState<{
@@ -74,7 +74,7 @@ export const Header = () => {
         onClick={() => navigate("/dashboard")}
       />
 
-      <h1 className="text-5xl font-extrabold leading-tight text-white hidden drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,0.8)] md:block">
+      <h1 className="text-5xl font-extrabold leading-tight text-white hidden drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,0.8)] md:block ml-16">
         ConvoCloud
       </h1>
       <div className="flex flex-row justify-center items-center">
