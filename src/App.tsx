@@ -18,7 +18,7 @@ const queryClient = new QueryClient();
 const App: React.FC = () => {
   return (
     <div
-      className="min-h-screen relative bg-cover bg-no-repeat"
+      className="min-h-screen relative bg-cover overflow-x-hidden bg-no-repeat"
       style={{
         backgroundImage: `url(${BackgroundPicture})`,
         backgroundSize: "cover",
