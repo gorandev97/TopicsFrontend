@@ -79,8 +79,14 @@ export const EditUserModal = ({
 
   if (!isOpen) return null;
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-      <div className="bg-white rounded-lg shadow-lg w-full max-w-md mx-4 p-6 relative">
+    <div
+      className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
+      onClick={handleClose}
+    >
+      <div
+        className="bg-white rounded-lg shadow-lg w-full max-w-md mx-4 p-6 relative"
+        onClick={(e) => e.stopPropagation()}
+      >
         <button
           className="absolute top-4 right-4 text-gray-500 hover:text-gray-800 text-xl font-bold"
           onClick={handleClose}

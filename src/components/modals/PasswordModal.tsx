@@ -29,8 +29,14 @@ export const NewPasswordModal = ({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center">
-      <div className="bg-white p-6 rounded shadow-lg w-96">
+    <div
+      className="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center"
+      onClick={onClose}
+    >
+      <div
+        className="bg-white p-6 rounded shadow-lg w-96"
+        onClick={(e) => e.stopPropagation()}
+      >
         <h2 className="text-xl font-bold mb-4">Set New Password</h2>
         <div className="mb-4">
           <label

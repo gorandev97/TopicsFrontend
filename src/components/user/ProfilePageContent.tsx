@@ -62,14 +62,21 @@ export const ProfilePageContent = () => {
           <div className="flex flex-col gap-4">
             <div className="sm:text-4xl text-xl flex flex-row text-blue-300 justfy-center drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,0.8)] font-bold items-end">
               First name:{" "}
-              <div className="sm:text-3xl text-l ml-4 drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,0.8)] text-blue-100">{user.firstName}</div>
+              <div className="sm:text-3xl text-l ml-4 drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,0.8)] text-blue-100">
+                {user.firstName}
+              </div>
             </div>
             <div className="sm:text-4xl text-xl flex flex-row text-blue-300  drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,0.8)] justfy-center items-end font-bold">
               Last name:{" "}
-              <div className="sm:text-3xl text-l ml-4 drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,0.8)] text-blue-100">{user.lastName}</div>
+              <div className="sm:text-3xl text-l ml-4 drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,0.8)] text-blue-100">
+                {user.lastName}
+              </div>
             </div>
             <div className="sm:text-4xl text-xl flex flex-row  text-blue-300 justfy-center font-bold  drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,0.8)] items-end">
-              E-mail:<div className="sm:text-3xl text-l ml-4 drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,0.8)] text-blue-100" >{user.email}</div>
+              Mail:
+              <div className="sm:text-3xl text-l ml-4 drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,0.8)] text-blue-100 break-words">
+                {user.email}
+              </div>
             </div>
           </div>
           <div className="flex sm:flex-row flex-col gap-2 mt-5">

@@ -2,7 +2,6 @@ import { useState } from "react";
 import LoginModal from "../components/auth/Login";
 import RegisterModal from "../components/auth/Register";
 import BackgroundImage from "../assets/logo/convo_cloud_transparent.png";
-import BackgroundPicture from "../assets/icons/bg.jpg";
 import { Button } from "../components/Button";
 
 export const LandingPage = () => {
@@ -25,7 +24,7 @@ export const LandingPage = () => {
         />
       </div>
       <div className="flex flex-col  justify-center w-2/3 text-white text-left w-[600px] mr-20">
-        <h1 className="text-5xl font-extrabold leading-tight mb-4 text-blue-100 drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,0.8)]">
+        <h1 className="text-5xl font-extrabold leading-tight mb-4 text-gray-300 drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,0.8)]">
           Welcome to ConvoCloud
         </h1>
         <p className="text-xl mb-6  text-gray-500 drop-shadow-[0_0.5px_0.5px_rgba(0,0,0,0.8)]">

@@ -46,8 +46,14 @@ export const TopicModal = ({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-50">
-      <div className="bg-white p-6 rounded-lg shadow-lg w-96">
+    <div
+      className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-50"
+      onClick={onClose}
+    >
+      <div
+        className="bg-white p-6 rounded-lg shadow-lg w-96"
+        onClick={(e) => e.stopPropagation()}
+      >
         <h2 className="text-xl font-bold mb-4">Edit Topic</h2>
         <div className="mb-4">
           <label htmlFor="title" className="block text-sm font-medium">
