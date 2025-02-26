@@ -61,12 +61,7 @@ export const Topics = (props: TopicsProps) => {
         {pages.map((page, index) => (
           <div key={index} className="flex flex-row flex-wrap justify-between">
             {page.data.map((topic: Topic) => (
-              <GlowCapture>
-                <Glow color='#90D5FF'>
-                  <TopicsCard topic={topic} />
-                </Glow>
-              </GlowCapture>
-              
+              <TopicsCard topic={topic} />
             ))}
           </div>
         ))}
