@@ -38,7 +38,7 @@ export const TopicsFullCard = (props: TopicsFullCardProps) => {
       </div>
       <div className="px-3">
         <h2 className="text-xl font-bold text-blue-900">{topic.title}</h2>
-        <div className="line-clamp-5">{topic?.description}</div>
+        <div className="">{topic?.description}</div>
         <div className="flex flex-row gap-4 ">
           <LikeButtons
             likesCount={topic?.likesCount}
