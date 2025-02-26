@@ -11,7 +11,6 @@ import { EmptyState } from "../placeholder/EmptyState";
 import { TopicModal } from "../modals/TopicModal";
 import { useEffect, useState } from "react";
 import { useCreateTopic } from "../../api/topics";
-import { Glow, GlowCapture } from "@codaworks/react-glow";
 
 type TopicsProps = {
   pages: {

@@ -1,7 +1,7 @@
+import { useEffect, useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { getDecodedToken } from "../helper/token";
 import Logo from "../assets/logo/convo_cloud_logo-removebg-noBackground.png";
-import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { NotificationsButton } from "./notifications/NotificationsButton";
 import {
   useGetNotifications,
@@ -53,6 +53,30 @@ export const Header = () => {
         handleLogoutClick();
     }
   };
+
+  const dropdownRef = useRef<HTMLDivElement | null>(null);
+  const profileImgRef = useRef<HTMLImageElement | null>(null);
+
+  // Close the dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node) &&
+        profileImgRef.current &&
+        !profileImgRef.current.contains(event.target as Node)
+      ) {
+        setIsDropdownOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
   useEffect(() => {
     if (isSuccess) {
       setNotificationsData(data);
@@ -85,13 +109,17 @@ export const Header = () => {
         />
         <div className="relative">
           <img
+            ref={profileImgRef}
             src={user?.profilePicture}
             alt="Profile"
             className="w-14 h-14 rounded-full bg-blue-500 my-3 mr-10 cursor-pointer"
             onClick={toggleDropdown}
           />
           {isDropdownOpen && (
-            <div className="absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-md shadow-lg z-[99999]">
+            <div
+              ref={dropdownRef}
+              className="absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-md shadow-lg z-[99999]"
+            >
               <ul className="py-1">
                 <li
                   className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
@@ -115,8 +143,14 @@ export const Header = () => {
             </div>
           )}
           {isModalOpen && (
-            <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-20">
-              <div className="bg-white rounded-lg p-6 shadow-lg w-96">
+            <div
+              className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-20"
+              onClick={() => setIsModalOpen(false)}
+            >
+              <div
+                className="bg-white rounded-lg p-6 shadow-lg w-96"
+                onClick={(e) => e.stopPropagation()}
+              >
                 <h2 className="text-xl font-bold mb-4">Confirm Logout</h2>
                 <p className="text-gray-600 mb-6">
                   Are you sure you want to logout?
