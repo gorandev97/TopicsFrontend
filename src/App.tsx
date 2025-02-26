@@ -18,16 +18,19 @@ const queryClient = new QueryClient();
 const App: React.FC = () => {
   return (
     <div
-      className="min-h-screen relative bg-cover overflow-x-hidden bg-no-repeat"
+      className="min-h-screen relative overflow-x-hidden bg-no-repeat bg-cover"
       style={{
         backgroundImage: `url(${BackgroundPicture})`,
         backgroundSize: "cover",
         backgroundRepeat: "no-repeat",
       }}
     >
+      {/* Black overlay with 30% opacity */}
+      <div className="absolute inset-0 bg-black opacity-10 z-0" />
+
       <QueryClientProvider client={queryClient}>
         <Router>
-          <main className="flex-1 min-h-screen">
+          <main className="flex-1 min-h-screen relative z-10">
             <Routes>
               <Route path="/" element={<LandingPage />} />
               <Route

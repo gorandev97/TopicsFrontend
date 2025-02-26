@@ -2,7 +2,14 @@
 module.exports = {
   content: ["./src/**/*.{html,js,jsx,ts,tsx}"],
   theme: {
-    extend: {},
+    extend: {
+      colors: {
+        "custom-blue": "#276BEC", // You can name it anything like custom-blue
+      },
+    },
   },
-  plugins: [require("@tailwindcss/line-clamp"), require('@codaworks/react-glow/tailwind')],
+  plugins: [
+    require("@tailwindcss/line-clamp"),
+    require("@codaworks/react-glow/tailwind"),
+  ],
 };

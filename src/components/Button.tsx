@@ -16,7 +16,7 @@ export const Button = ({
       disabled={isDisabled}
       type={type}
       onClick={onClick}
-      className="px-8 py-2 bg-blue-400 text-white border border-blue-400 shadow-md text-lg rounded-lg transition duration-300 ease-in-out transform hover:bg-blue-400 hover:scale-105 hover:text-white w-30"
+      className="px-8 py-2 bg-custom-blue text-white border border-blue-400 shadow-md text-lg rounded-lg transition duration-300 ease-in-out transform hover:bg-blue-400 hover:scale-105 hover:text-white w-30"
     >
       {title}
     </button>
