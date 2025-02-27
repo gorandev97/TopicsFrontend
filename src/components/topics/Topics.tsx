@@ -67,8 +67,8 @@ export const Topics = (props: TopicsProps) => {
 
   return (
     <>
-      <div className="self-center w-full flex md:justify-between justify-center items-center pt-5 md:pr-10">
-        <div className="flex flex-row gap-5 ml-16">
+      <div className="self-center w-full flex md:justify-between md:flex-row flex-col justify-center items-center pt-5 md:pr-10">
+        <div className="flex flex-col md:flex-row gap-5 ml-0 md:ml-16 mb-4 md:mb-0">
           <div className="w-60 bg-white border border-blue-700 rounded-3xl py-2 px-4 flex justify-between items-center">
             <input
               type="text"
