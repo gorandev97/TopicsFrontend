@@ -10,7 +10,7 @@ export interface Topic {
 
   // Foreign key relationship with User (author of the topic)
   author: User; // Author is of type User (represented by the User model)
-
+  category: TopicCategory; // Topic category
   // Related records
   comments: Comment[]; // Array of related Comment objects
   likes: Like[]; // Array of related Like objects
@@ -69,4 +69,21 @@ export interface Notification {
   updatedAt: string;
   topicId: string;
   user: User;
+}
+export enum TopicCategory {
+  Technology = "Technology",
+  Entertainment = "Entertainment",
+  Science = "Science",
+  Lifestyle = "Lifestyle",
+  Politics = "Politics",
+  Business_Finance = "Business_Finance",
+  Education = "Education",
+  Sports = "Sports",
+  Art_Creativity = "Art_Creativity",
+  Social_Issues = "Social_Issues",
+  History_Culture = "History_Culture",
+  Philosophy_Thought = "Philosophy_Thought",
+  Hobbies_Interests = "Hobbies_Interests",
+  Technology_Support = "Technology_Support",
+  Miscellaneous = "Miscellaneous",
 }

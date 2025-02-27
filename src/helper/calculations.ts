@@ -1,3 +1,5 @@
+import { TopicCategory } from "../interfaces/interfaces";
+
 export const getElapsedTime = (postedDate: string): string => {
   const now = new Date(); // Current date and time
   const posted = new Date(postedDate); // Parse the posted date
@@ -21,4 +23,40 @@ export function formatNumber(value: number) {
     return (value / 1_000).toFixed(1).replace(/\.0$/, "") + "K";
   }
   return value?.toString(); // Return the number as-is if it's less than 1,000
+}
+export function getTopicCategoryString(category: TopicCategory): string {
+  switch (category) {
+    case TopicCategory.Technology:
+      return "Technology";
+    case TopicCategory.Entertainment:
+      return "Entertainment";
+    case TopicCategory.Science:
+      return "Science";
+    case TopicCategory.Lifestyle:
+      return "Lifestyle";
+    case TopicCategory.Politics:
+      return "Politics";
+    case TopicCategory.Business_Finance:
+      return "Business & Finance";
+    case TopicCategory.Education:
+      return "Education";
+    case TopicCategory.Sports:
+      return "Sports";
+    case TopicCategory.Art_Creativity:
+      return "Art & Creativity";
+    case TopicCategory.Social_Issues:
+      return "Social Issues";
+    case TopicCategory.History_Culture:
+      return "History & Culture";
+    case TopicCategory.Philosophy_Thought:
+      return "Philosophy & Thought";
+    case TopicCategory.Hobbies_Interests:
+      return "Hobbies & Interests";
+    case TopicCategory.Technology_Support:
+      return "Technology Support";
+    case TopicCategory.Miscellaneous:
+      return "Miscellaneous";
+    default:
+      return "Unknown Category";
+  }
 }

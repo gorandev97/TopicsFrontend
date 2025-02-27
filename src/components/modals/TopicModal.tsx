@@ -1,11 +1,14 @@
 import React, { useEffect, useState } from "react";
+import { DropDown } from "../topics/CategoryDropdown";
+import { TopicCategory } from "../../interfaces/interfaces";
 
 interface ModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onSave: (title: string, content: string) => void;
+  onSave: (title: string, content: string, category: string) => void;
   initialTitle?: string;
   initialContent?: string;
+  initialCategory?: string;
 }
 
 export const TopicModal = ({
@@ -14,14 +17,15 @@ export const TopicModal = ({
   onSave,
   initialTitle = "",
   initialContent = "",
+  initialCategory = "",
 }: ModalProps) => {
   const [title, setTitle] = useState<string>(initialTitle);
   const [content, setContent] = useState<string>(initialContent);
   const [titleError, setTitleError] = useState<string>("");
 
   const handleSave = () => {
-    if (title.trim() && content.trim()) {
-      onSave(title, content);
+    if (title.trim() && content.trim() && category) {
+      onSave(title, content, category);
       onClose();
     }
   };
@@ -30,8 +34,9 @@ export const TopicModal = ({
     if (isOpen) {
       setTitle(initialTitle);
       setContent(initialContent);
+      setCategory(initialCategory);
     }
-  }, [isOpen, initialTitle, initialContent]);
+  }, [isOpen, initialTitle, initialContent, initialCategory]);
 
   const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newTitle = e.target.value;
@@ -43,6 +48,8 @@ export const TopicModal = ({
     setTitle(newTitle);
   };
 
+  const [category, setCategory] = useState(initialCategory);
+  const [isDropdownOpen, setIsDropdownOpen] = useState<boolean>(false);
   if (!isOpen) return null;
 
   return (
@@ -54,7 +61,9 @@ export const TopicModal = ({
         className="bg-white p-6 rounded-lg shadow-lg w-96"
         onClick={(e) => e.stopPropagation()}
       >
-        <h2 className="text-xl font-bold mb-4">Edit Topic</h2>
+        <h2 className="text-xl font-bold mb-4">
+          {title ? "Edit Topic" : "Create Topic"}
+        </h2>
         <div className="mb-4">
           <label htmlFor="title" className="block text-sm font-medium">
             Title
@@ -70,7 +79,16 @@ export const TopicModal = ({
           />
           {titleError && <p className="text-red-500 text-sm">{titleError}</p>}
         </div>
-        <div className="mb-4">
+        <DropDown
+          className=" w-auto bg-white border border-gray-200 rounded-lg py-2 px-4 flex justify-between items-center relative cursor-pointer"
+          selectedItem={category ?? initialCategory}
+          setSelectedItem={setCategory}
+          isDropdownOpen={isDropdownOpen}
+          setIsDropdownOpen={setIsDropdownOpen}
+          items={Object.keys(TopicCategory)}
+          isCategory={true}
+        />
+        <div className="mb-4 mt-4">
           <label htmlFor="content" className="block text-sm font-medium">
             Content
           </label>

@@ -86,7 +86,7 @@ export const useUpdateUser = () => {
 
 export const deleteUser = async () => {
   const token = localStorage.getItem("userToken");
-  console.log(token);
+
   const response = await fetch(`${config.apiUrl}/users/delete`, {
     method: "DELETE",
     headers: {

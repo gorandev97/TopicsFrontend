@@ -5,12 +5,13 @@ import {
   RefetchOptions,
 } from "@tanstack/react-query";
 import { TopicsCard } from "./TopicsCard";
-import { Topic } from "../../interfaces/interfaces";
+import { Topic, TopicCategory } from "../../interfaces/interfaces";
 import { Button } from "../Button";
 import { EmptyState } from "../placeholder/EmptyState";
 import { TopicModal } from "../modals/TopicModal";
 import { useEffect, useState } from "react";
 import { useCreateTopic } from "../../api/topics";
+import { DropDown } from "./CategoryDropdown";
 
 type TopicsProps = {
   pages: {
@@ -32,22 +33,65 @@ type TopicsProps = {
       Error
     >
   >;
+  setSearchTerm: (input: string) => void;
+  setCategory: (input: string) => void;
+  search: string;
+  selectedCategory: string;
 };
 
 export const Topics = (props: TopicsProps) => {
-  const { pages, hasNextPage, isFetchingNextPage, fetchNextPage, refetch } =
-    props;
+  const {
+    pages,
+    hasNextPage,
+    isFetchingNextPage,
+    fetchNextPage,
+    refetch,
+    setSearchTerm,
+    setCategory,
+    selectedCategory,
+  } = props;
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [isDropdownOpen, setIsDropdownOpen] = useState<boolean>(false);
+  const [searchInput, setSearchInput] = useState<string>("");
   const { mutate, isSuccess } = useCreateTopic();
   const handleEditTopic = (title: string, content: string) => {
-    mutate({ title, description: content });
+    mutate({ title, description: content, category: selectedCategory });
   };
   useEffect(() => {
     refetch();
   }, [isSuccess, refetch]);
+
+  const handleSetCategory = (input: string) => {
+    setCategory(input);
+  };
+
   return (
     <>
-      <div className="self-center w-full flex md:justify-end justify-center items-center pt-5 md:pr-10">
+      <div className="self-center w-full flex md:justify-between justify-center items-center pt-5 md:pr-10">
+        <div className="flex flex-row gap-5 ml-16">
+          <div className="w-60 bg-white border border-blue-700 rounded-3xl py-2 px-4 flex justify-between items-center">
+            <input
+              type="text"
+              className="w-full bg-transparent outline-none"
+              placeholder="Search"
+              value={searchInput}
+              onChange={(e) => setSearchInput(e.target.value)}
+            />
+            <i
+              className="ri-search-line cursor-pointer"
+              onClick={() => setSearchTerm(searchInput)}
+            ></i>
+          </div>
+          <DropDown
+            className="max-w-80 w-auto bg-white border border-blue-700 rounded-3xl py-2 px-4 flex justify-between items-center relative cursor-pointer"
+            selectedItem={selectedCategory}
+            setSelectedItem={handleSetCategory}
+            isDropdownOpen={isDropdownOpen}
+            setIsDropdownOpen={setIsDropdownOpen}
+            items={Object.keys(TopicCategory)}
+            isCategory={true}
+          />
+        </div>
         <Button
           title={"Create a new topic"}
           onClick={() => setIsModalOpen(true)}

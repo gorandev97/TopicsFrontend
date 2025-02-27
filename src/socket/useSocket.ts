@@ -39,7 +39,7 @@ export const useSocket = (count: number, notifications: Notification[]) => {
             },
           });
           setUnreadCount((prevUnreadCount) => prevUnreadCount + 1);
-          console.log(notification.notification, unreadNotifications, "nesto");
+
           setUnreadNotifications((prevUnreadNotifications) => [
             notification.notification,
             ...prevUnreadNotifications,
@@ -50,7 +50,6 @@ export const useSocket = (count: number, notifications: Notification[]) => {
     socket.on(
       "notificationsCount",
       (count: { notificationsCount: number; id: string }) => {
-        console.log(user?.id === count.id, user?.id, count.id);
         if (user?.id === count.id) setUnreadCount(count.notificationsCount);
       }
     );
@@ -58,7 +57,7 @@ export const useSocket = (count: number, notifications: Notification[]) => {
     return () => {
       socket.disconnect();
     };
-  }, []);
-  console.log(unreadCount, unreadNotifications, notifications);
+  }, [navigate, user?.id]);
+
   return { unreadCount, unreadNotifications };
 };

@@ -1,14 +1,13 @@
 import { useNavigate, useParams } from "react-router-dom";
 import { useDeleteTopic, useGetTopic, useUpdateTopic } from "../api/topics";
 import { useEffect, useState } from "react";
-import { Comment, Topic } from "../interfaces/interfaces";
+import { Comment, Topic, TopicCategory } from "../interfaces/interfaces";
 import DownArrow from "../assets/icons/arrow.png";
 import WriteIcon from "../assets/icons/pencil.png";
 import {
   useCreateComment,
   useDeleteComment,
   useLikedComments,
-  useReplyComment,
   useUpdateComment,
 } from "../api/comments";
 import { Button } from "../components/Button";
@@ -57,10 +56,19 @@ export const TopicPage = () => {
     useDeleteComment();
   const mutate = useUpdateTopic();
 
-  const handleEditTopic = (title: string, content: string) => {
+  const handleEditTopic = (
+    title: string,
+    content: string,
+    category: string
+  ) => {
     if (topic) {
-      mutate.mutate({ topicId: topic.id, title, content });
-      setTopic({ ...topic, title, description: content });
+      mutate.mutate({ topicId: topic.id, title, content, category });
+      setTopic({
+        ...topic,
+        title,
+        description: content,
+        category: category as TopicCategory,
+      });
       setIsModalOpen(false);
     }
   };
@@ -152,7 +160,12 @@ export const TopicPage = () => {
                 <Button title="Post" onClick={handleAddComment} />
               </div>
               <div className="block md:hidden bg-blue-600 text-white text-lg rounded-lg transition duration-300 ease-in-out transform hover:bg-blue-700 hover:scale-105 w-30 h-full">
-                <img src={WriteIcon} className="" onClick={handleAddComment} />
+                <img
+                  src={WriteIcon}
+                  alt="write"
+                  className=""
+                  onClick={handleAddComment}
+                />
               </div>
             </div>
           </div>
@@ -186,6 +199,7 @@ export const TopicPage = () => {
         onSave={handleEditTopic}
         initialTitle={topic?.title}
         initialContent={topic?.description}
+        initialCategory={topic?.category}
       />
       <ConfirmationModal
         isOpen={isDeleteModalOpen}
