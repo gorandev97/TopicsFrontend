@@ -5,6 +5,7 @@ import config from "../config";
 import { toast } from "react-toastify";
 import { Notification } from "../interfaces/interfaces";
 import { getDecodedToken } from "../helper/token";
+import { useNavigate } from "react-router-dom";
 
 const SOCKET_URL = config.apiUrl;
 
@@ -13,21 +14,39 @@ export const useSocket = (count: number, notifications: Notification[]) => {
 
   const [unreadNotifications, setUnreadNotifications] =
     useState<Notification[]>(notifications);
+
+  useEffect(() => {
+    setUnreadNotifications(notifications);
+  }, [notifications]);
   useEffect(() => {
     setUnreadCount(count);
   }, [count]);
   const user = getDecodedToken();
+  const navigate = useNavigate();
+
   useEffect(() => {
     const socket = io(SOCKET_URL);
     socket.on("connect", () => {
       console.log("Connected to WebSocket server");
     });
-    socket.on("notificationCreated", (notification: Notification) => {
-      if (user?.id === notification.userId) {
-        toast.success(notification.content);
-        setUnreadCount((prevUnreadCount) => prevUnreadCount + 1);
+    socket.on(
+      "notificationCreated",
+      (notification: { notification: Notification; topicId: string }) => {
+        if (user?.id === notification.notification.userId) {
+          toast.success(notification.notification.content, {
+            onClick: () => {
+              navigate(`/topic/${notification.topicId}`);
+            },
+          });
+          setUnreadCount((prevUnreadCount) => prevUnreadCount + 1);
+          console.log(notification.notification, unreadNotifications, "nesto");
+          setUnreadNotifications((prevUnreadNotifications) => [
+            notification.notification,
+            ...prevUnreadNotifications,
+          ]);
+        }
       }
-    });
+    );
     socket.on(
       "notificationsCount",
       (count: { notificationsCount: number; id: string }) => {
@@ -35,20 +54,11 @@ export const useSocket = (count: number, notifications: Notification[]) => {
         if (user?.id === count.id) setUnreadCount(count.notificationsCount);
       }
     );
-    socket.on(
-      "unreadNotifications",
-      (unreadNotifications: {
-        unreadNotifications: Notification[];
-        id: string;
-      }) => {
-        if (user?.id === unreadNotifications.id)
-          setUnreadNotifications(unreadNotifications.unreadNotifications);
-      }
-    );
+
     return () => {
       socket.disconnect();
     };
   }, []);
-
+  console.log(unreadCount, unreadNotifications, notifications);
   return { unreadCount, unreadNotifications };
 };

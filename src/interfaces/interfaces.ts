@@ -62,10 +62,11 @@ export interface Like {
 
 export interface Notification {
   id: string;
-  userId: string; // Foreign key referencing User
+  userId: string;
   content: string;
   isRead: boolean;
   createdAt: string;
   updatedAt: string;
-  user: User; // User who received the notification
+  topicId: string;
+  user: User;
 }
