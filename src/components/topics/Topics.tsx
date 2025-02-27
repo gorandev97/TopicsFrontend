@@ -58,9 +58,14 @@ export const Topics = (props: TopicsProps) => {
           <EmptyState title="There are no topics here" />
         )}
         {pages.map((page, index) => (
-          <div key={index} className="flex flex-row flex-wrap justify-between">
+          <div
+            key={index}
+            className="flex flex-row flex-wrap justify-between items-center"
+          >
             {page.data.map((topic: Topic) => (
-              <TopicsCard topic={topic} />
+              <div className="flex-grow flex justify-center">
+                <TopicsCard topic={topic} />
+              </div>
             ))}
           </div>
         ))}
