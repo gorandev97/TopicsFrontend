@@ -48,7 +48,7 @@ export const ProfilePageContent = () => {
 
   useEffect(() => {
     if (isDeleteUserSuccess) navigate("/");
-  }, [isDeleteUserSuccess]);
+  }, [isDeleteUserSuccess, navigate]);
   return (
     <>
       <ClipLoader color="#3498db" loading={isLoading} size={50} />

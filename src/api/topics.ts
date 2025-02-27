@@ -2,11 +2,19 @@ import { useInfiniteQuery, useMutation, useQuery } from "@tanstack/react-query";
 import config from "../config";
 import { toast } from "react-toastify";
 
-export const fetchTopics = async ({ pageParam = 0 }) => {
+export const fetchTopics = async ({
+  pageParam = 0,
+  queryKey,
+}: {
+  pageParam?: number;
+  queryKey: (string | { search: string; category: string })[];
+}) => {
+  const [, params] = queryKey;
+  const { search, category } = params as { search: string; category: string };
   const take = 21; //Added this to load 21 instead of 20 topics because there are three items per row so there wouldnt be an empty space between each fetch
   const token = localStorage.getItem("userToken");
   const response = await fetch(
-    `${config.apiUrl}/topics?skip=${pageParam}&take=${take}`,
+    `${config.apiUrl}/topics?skip=${pageParam}&take=${take}&search=${search}&category=${category}`,
     {
       headers: {
         Authorization: `Bearer ${token}`,
@@ -24,20 +32,28 @@ export const fetchTopics = async ({ pageParam = 0 }) => {
   };
 };
 
-export const useAllTopics = () => {
+export const useAllTopics = (search: string, category: string) => {
   return useInfiniteQuery({
-    queryKey: ["allTopics"],
+    queryKey: ["allTopics", { search, category }],
     queryFn: fetchTopics,
     getNextPageParam: (lastPage) => lastPage.nextPage,
     initialPageParam: 0,
   });
 };
 
-export const fetchLikedTopics = async ({ pageParam = 0 }) => {
+export const fetchLikedTopics = async ({
+  pageParam = 0,
+  queryKey,
+}: {
+  pageParam?: number;
+  queryKey: (string | { search: string; category: string })[];
+}) => {
+  const [, params] = queryKey;
+  const { search, category } = params as { search: string; category: string };
   const take = 21; //Added this to load 21 instead of 20 topics because there are three items per row so there wouldnt be an empty space between each fetch
   const token = localStorage.getItem("userToken");
   const response = await fetch(
-    `${config.apiUrl}/topics/like?skip=${pageParam}&take=${take}`,
+    `${config.apiUrl}/topics/like?skip=${pageParam}&take=${take}&search=${search}&category=${category}`,
     {
       headers: {
         Authorization: `Bearer ${token}`,
@@ -55,9 +71,9 @@ export const fetchLikedTopics = async ({ pageParam = 0 }) => {
   };
 };
 
-export const useAllLikedTopics = () => {
+export const useAllLikedTopics = (search: string, category: string) => {
   return useInfiniteQuery({
-    queryKey: ["hotTopics"],
+    queryKey: ["hotTopics", { search, category }],
     queryFn: fetchLikedTopics,
     getNextPageParam: (lastPage) => lastPage.nextPage,
     initialPageParam: 0,
@@ -90,6 +106,7 @@ const updateTopic = async (topicCredentials: {
   topicId: string;
   title: string;
   content: string;
+  category: string;
 }) => {
   const token = localStorage.getItem("userToken");
   const response = await fetch(
@@ -146,11 +163,19 @@ export const useDeleteTopic = () => {
   });
 };
 
-export const fetchUserTopics = async ({ pageParam = 0 }) => {
+export const fetchUserTopics = async ({
+  pageParam = 0,
+  queryKey,
+}: {
+  pageParam?: number;
+  queryKey: (string | { search: string; category: string })[];
+}) => {
+  const [, params] = queryKey;
+  const { search, category } = params as { search: string; category: string };
   const take = 21; //Added this to load 21 instead of 20 topics because there are three items per row so there wouldnt be an empty space between each fetch
   const token = localStorage.getItem("userToken");
   const response = await fetch(
-    `${config.apiUrl}/topics/user?skip=${pageParam}&take=${take}`,
+    `${config.apiUrl}/topics/user?skip=${pageParam}&take=${take}&search=${search}&category=${category}`,
     {
       headers: {
         Authorization: `Bearer ${token}`,
@@ -168,9 +193,9 @@ export const fetchUserTopics = async ({ pageParam = 0 }) => {
   };
 };
 
-export const useUserTopics = () => {
+export const useUserTopics = (search: string, category: string) => {
   return useInfiniteQuery({
-    queryKey: ["allUserTopics"],
+    queryKey: ["allUserTopics", { search, category }],
     queryFn: fetchUserTopics,
     getNextPageParam: (lastPage) => lastPage.nextPage,
     initialPageParam: 0,
@@ -180,6 +205,7 @@ export const useUserTopics = () => {
 export const createTopic = async (createTopicDto: {
   description: string;
   title: string;
+  category: string;
 }) => {
   const token = localStorage.getItem("userToken");
   const response = await fetch(`${config.apiUrl}/topics`, {

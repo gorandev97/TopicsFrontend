@@ -1,7 +1,3 @@
-import React from "react";
-import EditButton from "../assets/icons/edit.png";
-import DeleteButton from "../assets/icons/delete.png";
-
 interface ActionButtonsProps {
   onEdit: () => void; // Callback for edit action
   onDelete: () => void; // Callback for delete action

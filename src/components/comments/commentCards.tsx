@@ -52,7 +52,6 @@ export const CommentCard = (props: CommentCardProps) => {
 
   const handleReplyComment = () => {
     if (replyComment.trim() !== "") {
-      console.log(comment);
       mutateReplyComment({
         content: replyComment,
         topicId: comment.topicId ?? "",
@@ -63,7 +62,7 @@ export const CommentCard = (props: CommentCardProps) => {
   };
   useEffect(() => {
     refetch();
-  }, [isReplyCommentSuccess]);
+  }, [isReplyCommentSuccess, refetch]);
   return (
     <div className="border-blue-300 border-2 bg-blue-100 rounded-xl shadow-2xl w-full">
       <div className="flex flex-row ml-3 justify-between">
@@ -169,7 +168,12 @@ export const CommentCard = (props: CommentCardProps) => {
               <Button title="Post" onClick={handleReplyComment} />
             </div>
             <div className="block md:hidden bg-blue-600 text-white text-lg rounded-lg transition duration-300 ease-in-out transform hover:bg-blue-700 hover:scale-105 w-30 h-full">
-              <img src={WriteIcon} className="" onClick={handleReplyComment} />
+              <img
+                src={WriteIcon}
+                alt="write"
+                className=""
+                onClick={handleReplyComment}
+              />
             </div>
           </div>
         </div>
