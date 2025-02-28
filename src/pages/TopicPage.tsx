@@ -119,7 +119,7 @@ export const TopicPage = () => {
   }, [data, isSuccess]);
 
   return (
-    <div className="relative flex flex-col h-[calc(100vh-100px)] justfy-center items-center">
+    <div className="relative flex flex-col justfy-center items-center">
       {!isLoading && topic ? (
         <div className="px-10 mt-10 w-full">
           <div className="bg-white border border-blue-400 rounded-xl shadow-2xl">

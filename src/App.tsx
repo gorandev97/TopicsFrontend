@@ -26,7 +26,7 @@ const App: React.FC = () => {
       }}
     >
       {/* Black overlay with 30% opacity */}
-      <div className="absolute inset-0 bg-black opacity-10 z-0" />
+      <div className="absolute inset-0 bg-black opacity-10 z-0 h-full w-full" />
 
       <QueryClientProvider client={queryClient}>
         <Router>
