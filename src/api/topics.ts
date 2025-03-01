@@ -1,7 +1,10 @@
 import { useInfiniteQuery, useMutation, useQuery } from "@tanstack/react-query";
 import config from "../config";
 import { toast } from "react-toastify";
+import { QueryClient } from "@tanstack/react-query";
+const queryClient = new QueryClient();
 
+export { queryClient };
 export const fetchTopics = async ({
   pageParam = 0,
   queryKey,
@@ -97,7 +100,7 @@ export const getTopic = async (id: string) => {
 
 export const useGetTopic = (id: string) => {
   return useQuery({
-    queryKey: ["posts"],
+    queryKey: ["topic", id],
     queryFn: () => getTopic(id),
   });
 };
@@ -107,17 +110,26 @@ const updateTopic = async (topicCredentials: {
   title: string;
   content: string;
   category: string;
+  file?: File | null;
 }) => {
   const token = localStorage.getItem("userToken");
+  const formData = new FormData();
+
+  formData.append("content", topicCredentials.content);
+  formData.append("title", topicCredentials.title);
+  formData.append("category", topicCredentials.category);
+
+  if (topicCredentials.file) {
+    formData.append("file", topicCredentials.file);
+  }
   const response = await fetch(
     `${config.apiUrl}/topics/${topicCredentials.topicId}`,
     {
       method: "PUT",
       headers: {
         Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json",
       },
-      body: JSON.stringify(topicCredentials),
+      body: formData,
     }
   );
 
@@ -125,6 +137,9 @@ const updateTopic = async (topicCredentials: {
     throw new Error("Failed to update topic");
   }
 
+  if (!response.ok) {
+    throw new Error("Failed to create topic");
+  }
   return response.json();
 };
 
@@ -206,16 +221,30 @@ export const createTopic = async (createTopicDto: {
   description: string;
   title: string;
   category: string;
+  file?: File | null;
 }) => {
   const token = localStorage.getItem("userToken");
+
+  const formData = new FormData();
+
+  // Append the form data
+  formData.append("description", createTopicDto.description);
+  formData.append("title", createTopicDto.title);
+  formData.append("category", createTopicDto.category);
+
+  // If a file is provided, append it as well
+  if (createTopicDto.file) {
+    formData.append("file", createTopicDto.file); // File must be a File object
+  }
+
   const response = await fetch(`${config.apiUrl}/topics`, {
     method: "POST",
     headers: {
       Authorization: `Bearer ${token}`,
-      "Content-Type": "application/json",
     },
-    body: JSON.stringify(createTopicDto),
+    body: formData, // Send formData instead of JSON
   });
+
   return response.json();
 };
 
