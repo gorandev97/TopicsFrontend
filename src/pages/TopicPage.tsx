@@ -1,7 +1,7 @@
 import { useNavigate, useParams } from "react-router-dom";
 import { useDeleteTopic, useGetTopic, useUpdateTopic } from "../api/topics";
 import { useEffect, useState } from "react";
-import { Comment, Topic, TopicCategory } from "../interfaces/interfaces";
+import { Comment, Topic } from "../interfaces/interfaces";
 import DownArrow from "../assets/icons/arrow.png";
 import WriteIcon from "../assets/icons/pencil.png";
 import {
@@ -54,22 +54,30 @@ export const TopicPage = () => {
     useUpdateComment();
   const { mutate: mutateDeleteComment, isSuccess: isDeleteComment } =
     useDeleteComment();
-  const mutate = useUpdateTopic();
+  const { mutate } = useUpdateTopic();
 
   const handleEditTopic = (
     title: string,
     content: string,
-    category: string
+    category: string,
+    file?: File
   ) => {
     if (topic) {
-      mutate.mutate({ topicId: topic.id, title, content, category });
-      setTopic({
-        ...topic,
-        title,
-        description: content,
-        category: category as TopicCategory,
-      });
-      setIsModalOpen(false);
+      mutate(
+        {
+          topicId: topic.id,
+          title,
+          content,
+          category,
+          file,
+        },
+        {
+          onSuccess: (data) => {
+            setTopic({ ...topic, ...data });
+            setIsModalOpen(false);
+          },
+        }
+      );
     }
   };
 
@@ -122,7 +130,7 @@ export const TopicPage = () => {
     <div className="relative flex flex-col justfy-center items-center">
       {!isLoading && topic ? (
         <div className="px-10 mt-10 w-full">
-          <div className="bg-white border border-blue-400 rounded-xl shadow-2xl">
+          <div className="border border-blue-400 rounded-xl shadow-2xl bg-gradient-to-tr from-blue-200 via-white to-gray-300">
             <TopicsFullCard
               topic={topic}
               setIsModalOpen={setIsModalOpen}
@@ -200,6 +208,7 @@ export const TopicPage = () => {
         initialTitle={topic?.title}
         initialContent={topic?.description}
         initialCategory={topic?.category}
+        initialPicture={topic?.image ? topic.image.split("/").pop() : ""}
       />
       <ConfirmationModal
         isOpen={isDeleteModalOpen}

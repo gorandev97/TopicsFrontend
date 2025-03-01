@@ -4,6 +4,8 @@ import { Topic } from "../../interfaces/interfaces";
 import CommentImage from "../../assets/icons/chat-bubble.png";
 import { LikeButtons } from "../like/likeButtons";
 import { ActionButtons } from "../ActionButtons";
+import { useState } from "react";
+import { PictureModal } from "../modals/PictureModal";
 type TopicsFullCardProps = {
   topic: Topic;
   setIsModalOpen: (modalOpen: boolean) => void;
@@ -13,9 +15,11 @@ type TopicsFullCardProps = {
 export const TopicsFullCard = (props: TopicsFullCardProps) => {
   const user = getDecodedToken();
   const { topic, setIsModalOpen, setIsDeleteModalOpen } = props;
+  const [isPictureModal, setIsPictureModal] = useState<boolean>(false);
+
   return (
     <>
-      <div className="flex flex-row ml-3 justify-between">
+      <div className="flex flex-row ml-3 justify-between ">
         <div className="flex flex-row">
           <img
             src={topic.author?.profileImage}
@@ -24,7 +28,9 @@ export const TopicsFullCard = (props: TopicsFullCardProps) => {
           />
           <div className="mt-3 ml-3">
             <div>{topic.author?.firstName + " " + topic.author?.lastName}</div>
-            <div>{getElapsedTime(topic?.createdAt)} </div>
+            <div className="text-gray-400">
+              {getElapsedTime(topic?.createdAt)}{" "}
+            </div>
           </div>
         </div>
         {user?.id === topic.postedBy && (
@@ -38,7 +44,25 @@ export const TopicsFullCard = (props: TopicsFullCardProps) => {
       </div>
       <div className="px-3">
         <h2 className="text-xl font-bold text-blue-900">{topic.title}</h2>
-        <div className="">{topic?.description}</div>
+        <div className="flex md:flex-col flex-col justify-center items-center gap-4">
+          {topic && topic.image && (
+            <>
+              <img
+                src={topic.image}
+                alt="Topic"
+                className="w-full h-auto max-h-96 max-w-[500px] w-auto object-contain rounded-lg my-3 cursor-pointer border border-blue-700 shadow-lg"
+                onClick={() => setIsPictureModal(true)}
+              />
+              {isPictureModal && (
+                <PictureModal
+                  image={topic.image}
+                  setIsPictureModalOpen={setIsPictureModal}
+                />
+              )}
+            </>
+          )}
+          <div className="">{topic?.description}</div>
+        </div>
         <div className="flex flex-row gap-4 ">
           <LikeButtons
             likesCount={topic?.likesCount}

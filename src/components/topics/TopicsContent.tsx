@@ -24,7 +24,17 @@ export const TopicContent = (props: TopicContentProps) => {
         </div>
       </div>
       <div className="px-3">
-        <h2 className="text-xl font-bold text-blue-900 break-words">{topic.title}</h2>
+        <h2 className="text-xl font-bold text-blue-900 break-words">
+          {topic.title}
+        </h2>
+
+        {topic && topic.image && (
+          <img
+            src={topic.image}
+            alt="Topic"
+            className="w-full h-56 object-cover rounded-lg my-3 cursor-pointer"
+          />
+        )}
         <div className="line-clamp-5">{topic?.description}</div>
         <LikeButtons
           likesCount={topic?.likesCount}

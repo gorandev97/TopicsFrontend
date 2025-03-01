@@ -9,7 +9,7 @@ import { Topic, TopicCategory } from "../../interfaces/interfaces";
 import { Button } from "../Button";
 import { EmptyState } from "../placeholder/EmptyState";
 import { TopicModal } from "../modals/TopicModal";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useCreateTopic } from "../../api/topics";
 import { DropDown } from "./CategoryDropdown";
 
@@ -54,17 +54,24 @@ export const Topics = (props: TopicsProps) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState<boolean>(false);
   const [searchInput, setSearchInput] = useState<string>("");
   const { mutate, isSuccess } = useCreateTopic();
-  const handleEditTopic = (title: string, content: string) => {
-    mutate({ title, description: content, category: selectedCategory });
+  const handleEditTopic = (
+    title: string,
+    content: string,
+    category: string,
+    file?: File
+  ) => {
+    mutate({ title, description: content, category, file });
   };
   useEffect(() => {
     refetch();
   }, [isSuccess, refetch]);
 
-  const handleSetCategory = (input: string) => {
-    setCategory(input);
-  };
-
+  const handleSetCategory = useCallback(
+    (input: string) => {
+      setCategory(input);
+    },
+    [setCategory]
+  );
   return (
     <>
       <div className="self-center w-full flex md:justify-between md:flex-row flex-col justify-center items-center pt-5 md:pr-10">
