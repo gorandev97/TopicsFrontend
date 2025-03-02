@@ -11,8 +11,8 @@ export const TopicContent = (props: TopicContentProps) => {
   const { topic } = props;
   const user = getDecodedToken();
   return (
-    <>
-      <div className="flex flex-row ml-3">
+    <div className="h-full relative">
+      <div className="flex flex-row ml-3 ">
         <img
           src={topic.author?.profileImage}
           alt="Profile"
@@ -23,7 +23,9 @@ export const TopicContent = (props: TopicContentProps) => {
           <div>{getElapsedTime(topic?.createdAt)} </div>
         </div>
       </div>
-      <div className="px-3">
+
+      <div className="px-3 ">
+
         <h2 className="text-xl font-bold text-blue-900 break-words">
           {topic.title}
         </h2>
@@ -35,15 +37,22 @@ export const TopicContent = (props: TopicContentProps) => {
             className="w-full h-56 object-cover rounded-lg my-3 cursor-pointer"
           />
         )}
-        <div className="line-clamp-5">{topic?.description}</div>
-        <LikeButtons
-          likesCount={topic?.likesCount}
-          dislikesCount={topic.dislikesCount}
-          userId={user?.id ?? ""}
-          targetId={topic.id}
-          isTopic={true}
-        />
+
+        <div className={topic.image ? "line-clamp-2" : "line-clamp-[10]"}>
+          {topic?.description}
+        </div>
+
+        <div className="absolute bottom-0 left-2">
+          <LikeButtons
+            likesCount={topic?.likesCount}
+            dislikesCount={topic.dislikesCount}
+            userId={user?.id ?? ""}
+            targetId={topic.id}
+            isTopic={true}
+          />
+        </div>
+
       </div>
-    </>
+    </div>
   );
 };

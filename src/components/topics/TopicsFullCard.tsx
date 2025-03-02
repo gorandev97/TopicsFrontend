@@ -44,9 +44,11 @@ export const TopicsFullCard = (props: TopicsFullCardProps) => {
       </div>
       <div className="px-3">
         <h2 className="text-xl font-bold text-blue-900">{topic.title}</h2>
-        <div className="flex md:flex-col flex-col justify-center items-center gap-4">
+
+        <div className="flex md:flex-col flex-col justify-center  gap-4">
           {topic && topic.image && (
-            <>
+            <div className="flex items-center justify-center">
+
               <img
                 src={topic.image}
                 alt="Topic"
@@ -59,7 +61,9 @@ export const TopicsFullCard = (props: TopicsFullCardProps) => {
                   setIsPictureModalOpen={setIsPictureModal}
                 />
               )}
-            </>
+
+            </div>
+
           )}
           <div className="">{topic?.description}</div>
         </div>

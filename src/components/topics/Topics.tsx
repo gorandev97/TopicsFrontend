@@ -76,7 +76,7 @@ export const Topics = (props: TopicsProps) => {
     <>
       <div className="self-center w-full flex md:justify-between md:flex-row flex-col justify-center items-center pt-5 md:pr-10">
         <div className="flex flex-col md:flex-row gap-5 ml-0 md:ml-16 mb-4 md:mb-0">
-          <div className="w-60 bg-white border border-blue-700 rounded-3xl py-2 px-4 flex justify-between items-center">
+          <div className="w-60 bg-white border border-blue-700 rounded-lg py-2 px-4 flex justify-between items-center">
             <input
               type="text"
               className="w-full bg-transparent outline-none"
@@ -90,7 +90,7 @@ export const Topics = (props: TopicsProps) => {
             ></i>
           </div>
           <DropDown
-            className="max-w-80 w-auto bg-white border border-blue-700 rounded-3xl py-2 px-4 flex justify-between items-center relative cursor-pointer"
+            className="max-w-80 w-auto bg-white border border-blue-700 rounded-lg py-2 px-4 flex justify-between items-center relative cursor-pointer"
             selectedItem={selectedCategory}
             setSelectedItem={handleSetCategory}
             isDropdownOpen={isDropdownOpen}
@@ -109,12 +109,9 @@ export const Topics = (props: TopicsProps) => {
           <EmptyState title="There are no topics here" />
         )}
         {pages.map((page, index) => (
-          <div
-            key={index}
-            className="flex flex-row flex-wrap justify-between items-center"
-          >
+          <div key={index} className="flex flex-wrap justify-start items-start">
             {page.data.map((topic: Topic) => (
-              <div className="flex-grow flex justify-center">
+              <div className="p-2">
                 <TopicsCard topic={topic} />
               </div>
             ))}
