@@ -130,7 +130,9 @@ export const TopicPage = () => {
     <div className="relative flex flex-col justfy-center items-center">
       {!isLoading && topic ? (
         <div className="px-10 mt-10 w-full">
+
           <div className="border border-blue-400 rounded-xl shadow-2xl bg-gradient-to-tr from-blue-200 via-white to-light-blue">
+
             <TopicsFullCard
               topic={topic}
               setIsModalOpen={setIsModalOpen}
