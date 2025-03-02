@@ -60,21 +60,21 @@ export const ProfilePageContent = () => {
             className="rounded-full bg-blue-500 my-3 cursor-pointer max-w-[300px] w-full h-auto"
           />
           <div className="flex flex-col gap-4">
-            <div className="sm:text-4xl text-xl flex flex-row text-blue-300 justfy-center drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,0.8)] font-bold items-end">
+            <div className="sm:text-4xl text-xl flex flex-row text-gray-500 justfy-center drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,0.8)] font-bold items-end">
               First name:{" "}
-              <div className="sm:text-3xl text-l ml-4 drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,0.8)] text-blue-100">
+              <div className="sm:text-3xl text-l ml-4 drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,0.8)] text-white">
                 {user.firstName}
               </div>
             </div>
-            <div className="sm:text-4xl text-xl flex flex-row text-blue-300  drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,0.8)] justfy-center items-end font-bold">
+            <div className="sm:text-4xl text-xl flex flex-row text-gray-500  drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,0.8)] justfy-center items-end font-bold">
               Last name:{" "}
-              <div className="sm:text-3xl text-l ml-4 drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,0.8)] text-blue-100">
+              <div className="sm:text-3xl text-l ml-4 drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,0.8)] text-white">
                 {user.lastName}
               </div>
             </div>
-            <div className="sm:text-4xl text-xl flex flex-row  text-blue-300 justfy-center font-bold  drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,0.8)] items-end">
+            <div className="sm:text-4xl text-xl flex flex-row  text-gray-500 justfy-center font-bold  drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,0.8)] items-end">
               Mail:
-              <div className="sm:text-3xl text-l ml-4 drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,0.8)] text-blue-100 break-words">
+              <div className="sm:text-3xl text-l ml-4 drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,0.8)] text-white break-words">
                 {user.email}
               </div>
             </div>
