@@ -1,4 +1,13 @@
 import React, { useState } from "react";
+import { z } from "zod";
+
+const passwordSchema = z
+  .string()
+  .min(6, { message: "Password must be at least 6 characters long." })
+  .regex(/[A-Z]/, {
+    message: "Password must contain at least one uppercase letter.",
+  })
+  .regex(/[0-9]/, { message: "Password must contain at least one number." });
 
 type NewPasswordModalProps = {
   isOpen: boolean;
@@ -16,14 +25,22 @@ export const NewPasswordModal = ({
   const [error, setError] = useState<string>("");
 
   const handleSubmit = () => {
-    if (newPassword !== repeatPassword) {
-      setError("Passwords do not match.");
-      return;
-    }
+    try {
+      passwordSchema.parse(newPassword);
 
-    setError("");
-    onSave(newPassword);
-    onClose();
+      if (newPassword !== repeatPassword) {
+        setError("Passwords do not match.");
+        return;
+      }
+
+      setError("");
+      onSave(newPassword);
+      onClose();
+    } catch (validationError) {
+      if (validationError instanceof z.ZodError) {
+        setError(validationError.errors[0].message);
+      }
+    }
   };
 
   if (!isOpen) return null;

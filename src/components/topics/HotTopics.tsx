@@ -16,6 +16,7 @@ export const HotTopics = () => {
     refetch,
   } = useAllLikedTopics(searchTerm, category);
   useEffect(() => {
+    if (category === "All") setCategory("");
     refetch();
   }, [searchTerm, category, refetch]);
 
