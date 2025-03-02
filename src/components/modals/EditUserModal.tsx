@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button } from "../Button";
 import { z } from "zod";
 
@@ -81,16 +81,12 @@ export const EditUserModal = ({
   };
 
   const handleClose = () => {
-    setFormData({
-      firstName: "",
-      lastName: "",
-      email: "",
-    });
     setErrors({});
     onClose();
   };
 
   if (!isOpen) return null;
+
   return (
     <div
       className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
