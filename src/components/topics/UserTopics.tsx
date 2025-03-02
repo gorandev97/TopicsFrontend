@@ -16,6 +16,7 @@ export const UserTopics = () => {
     refetch,
   } = useUserTopics(searchTerm, category);
   useEffect(() => {
+    if (category === "All") setCategory("");
     refetch();
   }, [searchTerm, category, refetch]);
 

@@ -1,5 +1,16 @@
 import React, { useState } from "react";
 import { Button } from "../Button";
+import { z } from "zod";
+
+const nameSchema = z
+  .string()
+  .min(1, { message: "Name is required." })
+  .regex(/^[a-zA-Z\s]+$/, {
+    message: "Name should only contain letters and spaces.",
+  });
+const emailSchema = z
+  .string()
+  .email({ message: "Please enter a valid email address." });
 
 type EditUserModalProps = {
   isOpen: boolean;
@@ -33,29 +44,31 @@ export const EditUserModal = ({
   const validateForm = () => {
     const newErrors: { [key: string]: string } = {};
 
-    const nameRegex = /^[a-zA-Z\s]+$/;
-    if (!formData.firstName) {
-      newErrors.firstName = "First name is required.";
-    } else if (!nameRegex.test(formData.firstName)) {
-      newErrors.firstName =
-        "First name should only contain letters and spaces.";
+    try {
+      nameSchema.parse(formData.firstName);
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        newErrors.firstName = error.errors[0].message;
+      }
     }
 
-    if (!formData.lastName) {
-      newErrors.lastName = "Last name is required.";
-    } else if (!nameRegex.test(formData.lastName)) {
-      newErrors.lastName = "Last name should only contain letters and spaces.";
+    try {
+      nameSchema.parse(formData.lastName);
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        newErrors.lastName = error.errors[0].message;
+      }
     }
 
-    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-    if (!formData.email) {
-      newErrors.email = "Email is required.";
-    } else if (!emailRegex.test(formData.email)) {
-      newErrors.email = "Please enter a valid email address.";
+    try {
+      emailSchema.parse(formData.email);
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        newErrors.email = error.errors[0].message;
+      }
     }
 
     setErrors(newErrors);
-
     return Object.keys(newErrors).length === 0;
   };
 

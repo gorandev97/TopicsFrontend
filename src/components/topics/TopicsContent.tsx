@@ -33,7 +33,7 @@ export const TopicContent = (props: TopicContentProps) => {
           <img
             src={topic.image}
             alt="Topic"
-            className="w-full h-[200px] object-cover rounded-lg my-3 cursor-pointer"
+            className="w-full max-h-[150px] h-auto object-cover rounded-lg my-3 cursor-pointer"
           />
         )}
 

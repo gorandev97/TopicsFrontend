@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { DropDown } from "../topics/CategoryDropdown";
 import { TopicCategory } from "../../interfaces/interfaces";
+import { z } from "zod";
 
 interface ModalProps {
   isOpen: boolean;
@@ -17,6 +18,21 @@ interface ModalProps {
   initialPicture?: string;
 }
 
+export const topicSchema = z.object({
+  title: z
+    .string()
+    .min(1, "Title cannot be empty.")
+    .max(60, "Title cannot exceed 60 characters."),
+  content: z.string().min(1, "Content cannot be empty."),
+  category: z.string().min(1, "Category cannot be empty."),
+  file: z
+    .instanceof(File)
+    .optional()
+    .refine((file) => file && file?.size <= 5 * 1024 * 1024, {
+      message: "File size should not exceed 5MB.",
+    }),
+});
+
 export const TopicModal = ({
   isOpen,
   onClose,
@@ -28,13 +44,20 @@ export const TopicModal = ({
 }: ModalProps) => {
   const [title, setTitle] = useState<string>(initialTitle);
   const [content, setContent] = useState<string>(initialContent);
-  const [titleError, setTitleError] = useState<string>("");
 
+  const [errors, setErrors] = useState<{ [key: string]: string }>({});
   const handleSave = () => {
-    if (title.trim() && content.trim() && category) {
-      onSave(title, content, category, file ?? undefined);
-      onClose();
+    const result = topicSchema.safeParse({ title, content, category, file });
+    if (!result.success) {
+      const newErrors: { [key: string]: string } = {};
+      result.error.errors.forEach((error) => {
+        newErrors[error.path[0]] = error.message;
+      });
+      setErrors(newErrors);
+      return;
     }
+    onSave(title, content, category, file ?? undefined);
+    onClose();
   };
 
   useEffect(() => {
@@ -47,18 +70,13 @@ export const TopicModal = ({
 
   const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newTitle = e.target.value;
-    if (newTitle.length > 60) {
-      setTitleError("Title cannot exceed 60 characters.");
-    } else {
-      setTitleError("");
-    }
+
     setTitle(newTitle);
   };
 
   const [category, setCategory] = useState(initialCategory);
   const [isDropdownOpen, setIsDropdownOpen] = useState<boolean>(false);
   const [file, setFile] = useState<File | null>(null);
-  const [imageError, setImageError] = useState<string>("");
 
   if (!isOpen) return null;
 
@@ -68,14 +86,24 @@ export const TopicModal = ({
       const img = new Image();
       img.onload = () => {
         if (img.width > 1024 || img.height > 1024) {
-          setImageError("Image dimensions should not exceed 1024x1024 pixels.");
+          setErrors((prevErrors) => ({
+            ...prevErrors,
+            file: "Image dimensions should not exceed 1024x1024 pixels.",
+          }));
           return;
         }
         if (selectedFile.size > 5 * 1024 * 1024) {
-          setImageError("File size should not exceed 5MB.");
+          setErrors((prevErrors) => ({
+            ...prevErrors,
+            file: "Image size should be less than 5MB.",
+          }));
           return;
         }
-        setImageError("");
+        setErrors((prevErrors) => {
+          const newErrors = { ...prevErrors };
+          delete newErrors.file;
+          return newErrors;
+        });
         setFile(selectedFile);
       };
       img.src = URL.createObjectURL(selectedFile);
@@ -106,20 +134,29 @@ export const TopicModal = ({
             className="w-full px-3 py-2 border rounded-md"
             placeholder="Topic title"
           />
-          {titleError && <p className="text-red-500 text-sm">{titleError}</p>}
+          {errors.title && (
+            <p className="text-red-500 text-sm">{errors.title}</p>
+          )}
         </div>
-        <label htmlFor="title" className="block text-sm font-medium">
-          Category*
-        </label>
-        <DropDown
-          className=" w-auto bg-white border border-gray-200 rounded-lg py-2 px-4 flex justify-between items-center relative cursor-pointer"
-          selectedItem={category ?? initialCategory}
-          setSelectedItem={setCategory}
-          isDropdownOpen={isDropdownOpen}
-          setIsDropdownOpen={setIsDropdownOpen}
-          items={Object.keys(TopicCategory)}
-          isCategory={true}
-        />
+        <div>
+          <label htmlFor="title" className="block text-sm font-medium">
+            Category*
+          </label>
+          <DropDown
+            className=" w-auto bg-white border border-gray-200 rounded-lg py-2 px-4 flex justify-between items-center relative cursor-pointer"
+            selectedItem={category ?? initialCategory}
+            setSelectedItem={setCategory}
+            isDropdownOpen={isDropdownOpen}
+            setIsDropdownOpen={setIsDropdownOpen}
+            items={Object.keys(TopicCategory).filter(
+              (category) => category !== "All"
+            )}
+            isCategory={true}
+          />
+          {errors.category && (
+            <p className="text-red-500 text-sm">{errors.category}</p>
+          )}
+        </div>
         <div className="mb-4  mt-4">
           <label htmlFor="file" className="block text-sm font-medium">
             Upload Image
@@ -148,7 +185,7 @@ export const TopicModal = ({
               </span>
             ) : null}
           </div>
-          {imageError && <p className="text-red-500 text-sm">{imageError}</p>}
+          {errors.file && <p className="text-red-500 text-sm">{errors.file}</p>}
         </div>
         <div className="mb-2">
           <label htmlFor="content" className="block text-sm font-medium">
@@ -157,10 +194,15 @@ export const TopicModal = ({
           <textarea
             id="content"
             value={content ?? initialContent}
-            onChange={(e) => setContent(e.target.value)}
+            onChange={(e) => {
+              setContent(e.target.value);
+            }}
             className="w-full px-3 py-2 border rounded-md h-[200px]"
             placeholder="Topic content"
           />
+          {errors.content && (
+            <p className="text-red-500 text-sm">{errors.content}</p>
+          )}
         </div>
         <label
           htmlFor="message"
@@ -177,12 +219,7 @@ export const TopicModal = ({
           </button>
           <button
             onClick={handleSave}
-            className={`px-4 py-2 bg-blue-600 text-white rounded-md cursor-pointer ${
-              titleError !== "" || imageError !== ""
-                ? "border border-red-500 cursor-not-allowed"
-                : ""
-            }`}
-            disabled={titleError !== "" || imageError !== ""}
+            className={`px-4 py-2 bg-blue-600 text-white rounded-md cursor-pointer `}
           >
             Save
           </button>

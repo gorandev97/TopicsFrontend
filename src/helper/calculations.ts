@@ -56,6 +56,8 @@ export function getTopicCategoryString(category: TopicCategory): string {
       return "Technology Support";
     case TopicCategory.Miscellaneous:
       return "Miscellaneous";
+    case TopicCategory.All:
+      return "All";
     default:
       return "Unknown Category";
   }

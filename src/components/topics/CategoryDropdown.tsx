@@ -1,3 +1,4 @@
+import { useEffect, useRef } from "react";
 import { getTopicCategoryString } from "../../helper/calculations";
 import { TopicCategory } from "../../interfaces/interfaces";
 
@@ -20,6 +21,23 @@ export const DropDown = ({
   items,
   isCategory = false,
 }: DropDownProps) => {
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  const handleClickOutside = (event: MouseEvent) => {
+    if (
+      dropdownRef.current &&
+      !dropdownRef.current.contains(event.target as Node)
+    ) {
+      setIsDropdownOpen(false);
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
   return (
     <div
       className={className}
@@ -39,7 +57,10 @@ export const DropDown = ({
         <i className="ri-arrow-down-line"></i>
       </div>
       {isDropdownOpen && (
-        <div className="absolute mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 top-10 overflow-x-auto h-[200px] z-[9999]">
+        <div
+          className="absolute mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 top-10 overflow-x-auto h-[200px] z-[9999]"
+          ref={dropdownRef}
+        >
           <div className="py-1">
             {items.map((value, index) => (
               <div

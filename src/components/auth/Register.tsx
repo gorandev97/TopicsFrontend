@@ -1,8 +1,28 @@
 import React, { useState } from "react";
 import { useMutation } from "@tanstack/react-query";
-import { registerUser } from "../../api/auth"; // Replace with your actual API method
+import { registerUser } from "../../api/auth";
 import { Button } from "../Button";
 import { useNavigate } from "react-router-dom";
+import { z } from "zod";
+
+const registerSchema = z.object({
+  firstName: z
+    .string()
+    .min(1, { message: "First name is required." })
+    .regex(/^[a-zA-Z\s]+$/, {
+      message: "First name should only contain letters and spaces.",
+    }),
+  lastName: z
+    .string()
+    .min(1, { message: "Last name is required." })
+    .regex(/^[a-zA-Z\s]+$/, {
+      message: "Last name should only contain letters and spaces.",
+    }),
+  email: z.string().email({ message: "Please enter a valid email address." }),
+  password: z
+    .string()
+    .min(6, { message: "Password must be at least 6 characters long." }),
+});
 
 const RegisterModal = ({
   isOpen,
@@ -38,38 +58,22 @@ const RegisterModal = ({
   };
 
   const validateForm = () => {
-    const newErrors: { [key: string]: string } = {};
-
-    const nameRegex = /^[a-zA-Z\s]+$/;
-    if (!formData.firstName) {
-      newErrors.firstName = "First name is required.";
-    } else if (!nameRegex.test(formData.firstName)) {
-      newErrors.firstName =
-        "First name should only contain letters and spaces.";
+    try {
+      registerSchema.parse(formData);
+      setErrors({});
+      return true;
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        const newErrors: { [key: string]: string } = {};
+        error.errors.forEach((err) => {
+          if (err.path) {
+            newErrors[err.path[0]] = err.message;
+          }
+        });
+        setErrors(newErrors);
+      }
+      return false;
     }
-
-    if (!formData.lastName) {
-      newErrors.lastName = "Last name is required.";
-    } else if (!nameRegex.test(formData.lastName)) {
-      newErrors.lastName = "Last name should only contain letters and spaces.";
-    }
-
-    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-    if (!formData.email) {
-      newErrors.email = "Email is required.";
-    } else if (!emailRegex.test(formData.email)) {
-      newErrors.email = "Please enter a valid email address.";
-    }
-
-    if (!formData.password) {
-      newErrors.password = "Password is required.";
-    } else if (formData.password.length < 6) {
-      newErrors.password = "Password must be at least 6 characters long.";
-    }
-
-    setErrors(newErrors);
-
-    return Object.keys(newErrors).length === 0;
   };
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -79,19 +83,13 @@ const RegisterModal = ({
     }
   };
 
-  if (!isOpen) return null;
-
   const handleClose = () => {
-    // Reset form data to empty values
-    setFormData({
-      firstName: "",
-      lastName: "",
-      email: "",
-      password: "",
-    });
-    setErrors({}); // Clear error messages as well
-    onClose(); // Call the onClose function passed from the parent
+    setFormData({ firstName: "", lastName: "", email: "", password: "" });
+    setErrors({});
+    onClose();
   };
+
+  if (!isOpen) return null;
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
@@ -104,109 +102,44 @@ const RegisterModal = ({
         </button>
         <h2 className="text-2xl font-semibold mb-4 text-gray-800">Register</h2>
         <form onSubmit={handleSubmit} className="space-y-4">
-          <div>
-            <label
-              htmlFor="firstName"
-              className="block text-sm font-medium text-gray-700"
-            >
-              First Name
-            </label>
-            <input
-              id="firstName"
-              name="firstName"
-              type="text"
-              value={formData.firstName}
-              onChange={handleInputChange}
-              required
-              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
-            />
-            {errors.firstName && (
-              <p className="text-red-500 text-sm">{errors.firstName}</p>
-            )}
-          </div>
-          <div>
-            <label
-              htmlFor="lastName"
-              className="block text-sm font-medium text-gray-700"
-            >
-              Last Name
-            </label>
-            <input
-              id="lastName"
-              name="lastName"
-              type="text"
-              value={formData.lastName}
-              onChange={handleInputChange}
-              required
-              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
-            />
-            {errors.lastName && (
-              <p className="text-red-500 text-sm">{errors.lastName}</p>
-            )}
-          </div>
-          <div>
-            <label
-              htmlFor="email"
-              className="block text-sm font-medium text-gray-700"
-            >
-              Email
-            </label>
-            <input
-              id="email"
-              name="email"
-              type="email"
-              value={formData.email}
-              onChange={handleInputChange}
-              required
-              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
-            />
-            {errors.email && (
-              <p className="text-red-500 text-sm">{errors.email}</p>
-            )}
-          </div>
-          <div>
-            <label
-              htmlFor="password"
-              className="block text-sm font-medium text-gray-700"
-            >
-              Password
-            </label>
-            <div className="relative">
-              <input
-                id="password"
-                name="password"
-                type={showPassword ? "text" : "password"}
-                value={formData.password}
-                onChange={handleInputChange}
-                required
-                minLength={6}
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
-              />
-              <button
-                type="button"
-                onClick={() => setShowPassword(!showPassword)}
-                className="absolute inset-y-0 right-0 px-3 text-gray-600 hover:text-gray-800"
+          {Object.keys(formData).map((field) => (
+            <div key={field}>
+              <label
+                htmlFor={field}
+                className="block text-sm font-medium text-gray-700"
               >
-                {showPassword ? "Hide" : "Show"}
-              </button>
+                {field.charAt(0).toUpperCase() + field.slice(1)}
+              </label>
+              <div className="relative">
+                <input
+                  id={field}
+                  name={field}
+                  type={field === "password" && showPassword ? "text" : field}
+                  value={formData[field as keyof typeof formData]}
+                  onChange={handleInputChange}
+                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+                />
+                {field === "password" && (
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="absolute inset-y-0 right-0 px-3 text-gray-600 hover:text-gray-800"
+                  >
+                    {showPassword ? "Hide" : "Show"}
+                  </button>
+                )}
+
+                {errors[field] && (
+                  <p className="text-red-500 text-sm">{errors[field]}</p>
+                )}
+              </div>
             </div>
-            {errors.password && (
-              <p className="text-red-500 text-sm">{errors.password}</p>
-            )}
-          </div>
+          ))}
           <Button
             type="submit"
             isDisabled={mutation.isPending}
             title={mutation.isPending ? "Registering..." : "Register"}
           />
-          {mutation.isError && (
-            <p className="text-red-500 text-sm">
-              Error: {mutation.error.message}
-            </p>
-          )}
-          {mutation.isSuccess && (
-            <p className="text-green-500 text-sm">Registration successful!</p>
-          )}
         </form>
       </div>
     </div>

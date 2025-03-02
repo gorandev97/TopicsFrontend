@@ -71,6 +71,7 @@ export interface Notification {
   user: User;
 }
 export enum TopicCategory {
+  All = "All",
   Technology = "Technology",
   Entertainment = "Entertainment",
   Science = "Science",
