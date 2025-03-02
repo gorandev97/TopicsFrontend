@@ -12,7 +12,7 @@ export const TopicsCard = (props: TopicsProps) => {
   return (
     <div
       key={topic.id}
-      className="max-w-[500px] w-full h-auto bg-white border border-blue-500 rounded-lg m-8 relative shadow-2xl cursor-pointer hover:scale-105 transition duration-300 ease-in-out transform pb-4"
+      className="w-[300px] h-[480px] bg-white border border-blue-500 rounded-lg m-8 relative shadow-2xl cursor-pointer hover:scale-105 transition duration-300 ease-in-out transform pb-4"
       onClick={() => navigate(`/topic/${topic.id}`)}
     >
       <TopicContent topic={topic} />

@@ -6,6 +6,8 @@ module.exports = {
       colors: {
         "custom-blue": "#276BEC", // You can name it anything like custom-blue
         "text-gray": "#585858",
+        "light-blue": "#B2DFDB",
+        "blue-hover": "#1B4BA5",
       },
     },
   },
