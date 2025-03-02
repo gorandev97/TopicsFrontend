@@ -26,11 +26,20 @@ export const topicSchema = z.object({
   content: z.string().min(1, "Content cannot be empty."),
   category: z.string().min(1, "Category cannot be empty."),
   file: z
-    .instanceof(File)
+    .any()
     .optional()
-    .refine((file) => file && file?.size <= 5 * 1024 * 1024, {
-      message: "File size should not exceed 5MB.",
-    }),
+    .refine(
+      (file) => {
+        if (!file) return true;
+        if (file instanceof File) {
+          return file.size <= 5 * 1024 * 1024;
+        }
+        return false;
+      },
+      {
+        message: "File size should not exceed 5MB.",
+      }
+    ),
 });
 
 export const TopicModal = ({
