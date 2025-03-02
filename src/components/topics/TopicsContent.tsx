@@ -23,7 +23,9 @@ export const TopicContent = (props: TopicContentProps) => {
           <div>{getElapsedTime(topic?.createdAt)} </div>
         </div>
       </div>
+
       <div className="px-3 ">
+
         <h2 className="text-xl font-bold text-blue-900 break-words">
           {topic.title}
         </h2>
@@ -35,6 +37,7 @@ export const TopicContent = (props: TopicContentProps) => {
             className="w-full h-56 object-cover rounded-lg my-3 cursor-pointer"
           />
         )}
+
         <div className={topic.image ? "line-clamp-2" : "line-clamp-[10]"}>
           {topic?.description}
         </div>
@@ -48,6 +51,7 @@ export const TopicContent = (props: TopicContentProps) => {
             isTopic={true}
           />
         </div>
+
       </div>
     </div>
   );
