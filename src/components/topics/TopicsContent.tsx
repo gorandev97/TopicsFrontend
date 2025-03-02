@@ -25,7 +25,6 @@ export const TopicContent = (props: TopicContentProps) => {
       </div>
 
       <div className="px-3 ">
-
         <h2 className="text-xl font-bold text-blue-900 break-words">
           {topic.title}
         </h2>
@@ -34,7 +33,7 @@ export const TopicContent = (props: TopicContentProps) => {
           <img
             src={topic.image}
             alt="Topic"
-            className="w-full h-56 object-cover rounded-lg my-3 cursor-pointer"
+            className="w-full h-[200px] object-cover rounded-lg my-3 cursor-pointer"
           />
         )}
 
@@ -51,7 +50,6 @@ export const TopicContent = (props: TopicContentProps) => {
             isTopic={true}
           />
         </div>
-
       </div>
     </div>
   );

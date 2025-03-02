@@ -4,8 +4,10 @@ import { Topic } from "../../interfaces/interfaces";
 import CommentImage from "../../assets/icons/chat-bubble.png";
 import { LikeButtons } from "../like/likeButtons";
 import { ActionButtons } from "../ActionButtons";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { PictureModal } from "../modals/PictureModal";
+import { DropdownActionButtons } from "../DropdownActionButtons";
+
 type TopicsFullCardProps = {
   topic: Topic;
   setIsModalOpen: (modalOpen: boolean) => void;
@@ -16,7 +18,24 @@ export const TopicsFullCard = (props: TopicsFullCardProps) => {
   const user = getDecodedToken();
   const { topic, setIsModalOpen, setIsDeleteModalOpen } = props;
   const [isPictureModal, setIsPictureModal] = useState<boolean>(false);
+  const [isDropdownOpen, setIsDropdownOpen] = useState<boolean>(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
 
+  const handleClickOutside = (event: MouseEvent) => {
+    if (
+      dropdownRef.current &&
+      !dropdownRef.current.contains(event.target as Node)
+    ) {
+      setIsDropdownOpen(false);
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
   return (
     <>
       <div className="flex flex-row ml-3 justify-between ">
@@ -34,12 +53,51 @@ export const TopicsFullCard = (props: TopicsFullCardProps) => {
           </div>
         </div>
         {user?.id === topic.postedBy && (
-          <ActionButtons
-            onDelete={() => setIsDeleteModalOpen(true)}
-            onEdit={() => {
-              setIsModalOpen(true);
-            }}
-          />
+          <div className="relative" ref={dropdownRef}>
+            <button
+              onClick={() => {
+                setIsDropdownOpen(!isDropdownOpen);
+              }}
+              className="block md:hidden text-gray-700 mr-2 mt-8"
+            >
+              <svg
+                className="w-6 h-6"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M4 6h16M4 12h16M4 18h16"
+                ></path>
+              </svg>
+            </button>
+            <div className="hidden md:flex">
+              <ActionButtons
+                onDelete={() => {
+                  setIsDeleteModalOpen(true);
+                }}
+                onEdit={() => {
+                  setIsModalOpen(true);
+                }}
+              />
+            </div>
+            {isDropdownOpen && (
+              <div className="absolute right-0 mt-2 p-4 bg-white border border-gray-200 rounded-md shadow-lg z-10">
+                <DropdownActionButtons
+                  onEdit={() => {
+                    setIsModalOpen(true);
+                  }}
+                  onDelete={() => {
+                    setIsDeleteModalOpen(true);
+                  }}
+                />
+              </div>
+            )}
+          </div>
         )}
       </div>
       <div className="px-3">
@@ -48,7 +106,6 @@ export const TopicsFullCard = (props: TopicsFullCardProps) => {
         <div className="flex md:flex-col flex-col justify-center  gap-4">
           {topic && topic.image && (
             <div className="flex items-center justify-center">
-
               <img
                 src={topic.image}
                 alt="Topic"
@@ -61,9 +118,7 @@ export const TopicsFullCard = (props: TopicsFullCardProps) => {
                   setIsPictureModalOpen={setIsPictureModal}
                 />
               )}
-
             </div>
-
           )}
           <div className="">{topic?.description}</div>
         </div>

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useReplyComment } from "../../api/comments";
 import { getElapsedTime } from "../../helper/calculations";
 import { getDecodedToken } from "../../helper/token";
@@ -63,6 +63,26 @@ export const CommentCard = (props: CommentCardProps) => {
   useEffect(() => {
     refetch();
   }, [isReplyCommentSuccess, refetch]);
+
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  const handleClickOutside = (event: MouseEvent) => {
+    if (
+      dropdownRef.current &&
+      !dropdownRef.current.contains(event.target as Node)
+    ) {
+      setIsDropdownOpen(false);
+      setIsDropdownReplyOpen(false);
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
   return (
     <div className="border-blue-300 border-2 bg-blue-100 rounded-xl shadow-2xl w-full">
       <div className="flex flex-row ml-3 justify-between">
@@ -80,7 +100,7 @@ export const CommentCard = (props: CommentCardProps) => {
           </div>
         </div>
         {user?.id === comment.postedBy && (
-          <div className="relative">
+          <div className="relative" ref={dropdownRef}>
             <button
               onClick={() => {
                 setIsDropdownOpen(!isDropdownOpen);
@@ -199,7 +219,7 @@ export const CommentCard = (props: CommentCardProps) => {
                 </div>
               </div>
               {user?.id === reply.postedBy && (
-                <div className="relative">
+                <div className="relative" ref={dropdownRef}>
                   <button
                     onClick={() => {
                       setIsDropdownReplyOpen(!isDropdownReplyOpen);
